@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Avis Patients</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .rating span {
+            font-size: 25px;
+            cursor: pointer;
+        }
+        .rating span.active {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <form action="" method="post">
+        <h1>Formulaire de Recueil des Avis des Patients</h1>
+       <div>
+        <h4>Nom et Prénom</h4>
+        <input type="text" name="nom_prenom" required>
+       </div>
+
+       <div>
+        <h4>Âge</h4>
+        <label><input type="radio" name="age" value="Moins de 18 ans"> Moins de 18 ans</label>
+        <label><input type="radio" name="age" value="18 - 30 ans"> 18 - 30 ans</label>
+        <label><input type="radio" name="age" value="31 - 50 ans"> 31 - 50 ans</label>
+        <label><input type="radio" name="age" value="51 ans et plus"> 51 ans et plus</label>
+       </div>
+
+       <div>
+        <h4>Sexe</h4>
+        <label><input type="radio" name="sexe" value="Homme"> Homme</label>
+        <label><input type="radio" name="sexe" value="Femme"> Femme</label>
+       </div>
+
+       <div>
+        <h4>Nom de l’hôpital ou clinique</h4>
+        <input type="text" name="hopital" required>
+       </div>
+
+       <div>
+        <h4>Motif de visite</h4>
+        <label><input type="radio" name="motif" value="Consultation"> Consultation</label>
+        <label><input type="radio" name="motif" value="Urgence"> Urgence</label>
+        <label><input type="radio" name="motif" value="Hospitalisation"> Hospitalisation</label>
+        <label><input type="radio" name="motif" value="Maternité"> Maternité</label>
+        <label><input type="radio" name="motif" value="Autre"> Autre</label>
+       </div>
+
+       <div>
+        <h4>Si autre, précisez :</h4>
+        <input type="text" name="motif_autre">
+       </div>
+
+       <div>
+        <h4>Qualité de l’accueil et de la prise en charge</h4>
+        <p>(1 = Très mauvais, 5 = Excellent)</p>
+        <div class="rating" id="rating1">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+        <input type="hidden" name="accueil" id="accueil_value">
+       </div>
+
+       <div>
+        <h4>Temps d’attente acceptable ?</h4>
+        <label><input type="radio" name="attente" value="Oui"> Oui</label>
+        <label><input type="radio" name="attente" value="Non"> Non</label>
+       </div>
+
+       <div>
+        <h4>Le personnel soignant était-il à l’écoute ?</h4>
+        <p>(1 = Très mauvais, 5 = Excellent)</p>
+        <div class="rating" id="rating2">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+        <input type="hidden" name="ecoute" id="ecoute_value">
+       </div>
+
+       <div>
+        <h4>Difficultés rencontrées</h4>
+        <label><input type="checkbox" name="difficultes" value="Attente"> Attente</label>
+        <label><input type="checkbox" name="difficultes" value="Manque de matériel"> Manque de matériel</label>
+        <label><input type="checkbox" name="difficultes" value="Personnel indisponible"> Personnel indisponible</label>
+        <label><input type="checkbox" name="difficultes" value="Non"> Non</label>
+       </div>
+
+       <div>
+        <h4>Expliquez brièvement votre expérience :</h4>
+        <textarea name="experience" rows="4"></textarea>
+       </div>
+
+       <div>
+        <h4>Recommanderiez-vous cet hôpital/clinique ?</h4>
+        <input type="text" name="recommandation">
+       </div>
+
+       <div>
+        <h4>Suggestions d’amélioration</h4>
+        <input type="text" name="suggestion">
+       </div>
+
+       <div>
+        <button type="submit">Envoyer</button>
+       </div>
+    </form>
+
+    <script>
+        function handleRatingClick(ratingId, inputId) {
+            const stars = document.querySelectorAll(`#${ratingId} span`);
+            const input = document.getElementById(inputId);
+
+            stars.forEach(star => {
+                star.addEventListener("click", function() {
+                    let value = this.getAttribute("data-value");
+                    input.value = value;
+                    stars.forEach(s => s.classList.remove("active"));
+                    for (let i = 0; i < value; i++) {
+                        stars[i].classList.add("active");
+                    }
+                });
+            });
+        }
+
+        handleRatingClick("rating1", "accueil_value");
+        handleRatingClick("rating2", "ecoute_value");
+    </script>
+</body>
+</html>
