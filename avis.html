@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Avis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1>Liste des Avis</h1>
+        <p>Voici les avis soumis par d’autres patients.</p>
+        
+        <ul id="liste-avis">
+            <li>Avis 1 - 5 étoiles</li>
+            <li>Avis 2 - 4 étoiles</li>
+            <li>Avis 3 - 3 étoiles</li>
+            <!-- Ajouter dynamiquement des avis ici -->
+        </ul>
+
+        <button onclick="retourAccueil()">Retour à l'accueil</button>
+    </div>
+
+    <script>
+        function retourAccueil() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
