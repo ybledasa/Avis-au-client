@@ -89,3 +89,76 @@ button {
 button:hover {
     background: #007bff;
 }
+
+
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+echo "Le fichier traitement.php est bien appelé !<br>";
+
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+exit();
+?>
+
+
+<?php
+// Connexion à la base de données
+$servername = "localhost";
+$username = "root";  // Remplace par ton identifiant MySQL
+$password = "";      // Remplace par ton mot de passe MySQL
+$dbname = "avis_db";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Vérifier la connexion
+if ($conn->connect_error) {
+    die("Échec de la connexion : " . $conn->connect_error);
+}
+
+// Récupération des données du formulaire
+$nom_prenom = $_POST['nom_prenom'];
+$age = $_POST['age'];
+$sexe = $_POST['sexe'];
+$hopital = $_POST['hopital'];
+$motif = $_POST['motif'];
+$motif_autre = $_POST['motif_autre'];
+$accueil = $_POST['accueil'];
+$attente = $_POST['attente'];
+$ecoute = $_POST['ecoute'];
+$difficultes = isset($_POST['difficultes']) ? implode(", ", $_POST['difficultes']) : "Aucune";
+$experience = $_POST['experience'];
+$recommandation = $_POST['recommandation'];
+$suggestion = $_POST['suggestion'];
+
+// Préparer la requête SQL
+$sql = "INSERT INTO avis_patients (nom_prenom, age, sexe, hopital, motif, motif_autre, accueil, attente, ecoute, difficultes, experience, recommandation, suggestion) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ssssssissssss", $nom_prenom, $age, $sexe, $hopital, $motif, $motif_autre, $accueil, $attente, $ecoute, $difficultes, $experience, $recommandation, $suggestion);
+
+if ($stmt->execute()) {
+    echo "L'avis a été ajouté avec succès !";
+    exit(); // Arrête l'exécution pour voir le message
+} else {
+    echo "Erreur lors de l'ajout de l'avis : " . $conn->error;
+    exit(); // Arrête l'exécution pour voir l'erreur
+}
+
+
+// Exécuter la requête
+if ($stmt->execute()) {
+    header("Location: confirmation.html"); // Redirection après soumission
+    exit();
+} else {
+    echo "Erreur : " . $sql . "<br>" . $conn->error;
+}
+
+
+// Fermer la connexion
+$stmt->close();
+$conn->close();
+?>

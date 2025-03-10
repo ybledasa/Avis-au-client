@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     background-image: url('images.jpeg'); /* Vérifie le chemin */
@@ -89,3 +88,4 @@ button {
 button:hover {
     background: #007bff;
 }
+

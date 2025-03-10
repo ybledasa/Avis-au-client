@@ -28,11 +28,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     handleRatingClick("rating1", "accueil_value");
     handleRatingClick("rating2", "ecoute_value");
-
-    // Redirection vers la page de confirmation après soumission du formulaire
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Empêche l'envoi classique du formulaire
-        window.location.href = "confirmation.html"; // Redirige vers la page de confirmation
-    });
 });
