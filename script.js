@@ -29,3 +29,17 @@ document.addEventListener("DOMContentLoaded", function () {
     handleRatingClick("rating1", "accueil_value");
     handleRatingClick("rating2", "ecoute_value");
 });
+import { collection, getDocs } from "firebase/firestore";
+
+async function afficherAvis() {
+  const querySnapshot = await getDocs(collection(db, "avisPatients"));
+  querySnapshot.forEach((doc) => {
+    let data = doc.data();
+
+    console.log("Nom :", data.nomPrenom);
+    console.log("Âge :", data.âge);
+    console.log("Problèmes :", data.problèmes.join(", ")); // Afficher la liste correctement
+  });
+}
+
+afficherAvis();
