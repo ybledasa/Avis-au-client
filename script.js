@@ -29,3 +29,20 @@ document.addEventListener("DOMContentLoaded", function () {
     handleRatingClick("rating1", "accueil_value");
     handleRatingClick("rating2", "ecoute_value");
 });
+import { getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const db = getFirestore();
+
+async function afficherAvis() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "avisPatients"));
+    querySnapshot.forEach((doc) => {
+      console.log("Avis récupéré :", doc.data());
+    });
+  } catch (error) {
+    console.error("Erreur lors de la récupération des avis :", error);
+  }
+}
+
+afficherAvis();

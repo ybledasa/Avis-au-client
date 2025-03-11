@@ -1,0 +1,16 @@
+.avis-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.avis-card p {
+    margin: 5px 0;
+}
+
+.avis-card strong {
+    color: #333;
+}
