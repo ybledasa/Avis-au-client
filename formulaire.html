@@ -6,13 +6,13 @@
     <title>Formulaire Avis Patients</title>
     <link rel="stylesheet" href="formulaire.css">
     <script src="script.js"></script>
-    <link rel="stylesheet" href="formulaire.css">
+    
    
 </head>
 <body>
     <div class="image-container"></div>
     <div class="form-container">
-        <form action="traitement.php" method="post">
+        <form id="avisForm" >
             <h1>Formulaire de Recueil des Avis des Patients</h1>
             <p>Merci de prendre quelques instants pour partager votre expérience.</p>
     
@@ -38,7 +38,7 @@
            <div>
             <h4>Nom de l’hôpital ou clinique</h4>
            
-           <select name="nom de l'hopital" id="nom de l'hopital"  >
+           <select name="hopital" id="hopital" required >
                 <option value="" disabled selected>-- Sélectionnez l'hôpital ou la clinique --</option>
                 <option value="1">Centre hospitalier universitaire de Cocody (CHU de Cocody)</option>
                 <option value="2">Centre hospitalier universitaire de Treichville (CHU de Treichville)</option>
@@ -188,7 +188,6 @@
         </form>
     </div>
     <script type="module">
-        // Importer Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     
@@ -196,39 +195,43 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
             authDomain: "avis-au-client.firebaseapp.com",
-            databaseURL: "https://avis-au-client-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "avis-au-client",
-            storageBucket: "avis-au-client.firebasestorage.app",
+            storageBucket: "avis-au-client.appspot.com",
             messagingSenderId: "291367297087",
             appId: "1:291367297087:web:09beaf7794126fc79bd88a",
             measurementId: "G-WESSM7PQZM"
         };
     
-        // Initialize Firebase
+        // Initialisation Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        const db = getFirestore(app); // 🔹 Ajout de Firestore
     
         // Gestion du formulaire
         document.querySelector("form").addEventListener("submit", async function(event) {
             event.preventDefault(); // Empêcher le rechargement de la page
     
             // Récupérer les valeurs du formulaire
-            const nomPrenom = document.querySelector('input[name="nom_prenom"]').value;
+            const nomPrenom = document.querySelector('input[name="nom_prenom"]').value.trim();
             const age = document.querySelector('input[name="age"]:checked')?.value || "";
             const sexe = document.querySelector('input[name="sexe"]:checked')?.value || "";
-            const hopital = document.querySelector('select[name="hopital"]').value;
+            const hopital = document.querySelector('select[name="hopital"]').value.trim();
             const motif = document.querySelector('input[name="motif"]:checked')?.value || "";
-            const motifAutre = document.querySelector('input[name="motif_autre"]').value;
-            const accueil = document.getElementById("accueil_value").value;  // Correctif
+            const motifAutre = document.querySelector('input[name="motif_autre"]').value.trim();
+            const accueil = document.getElementById("accueil_value").value.trim();
             const attente = document.querySelector('input[name="attente"]:checked')?.value || "";
-            const ecoute = document.getElementById("ecoute_value").value;  // Correctif
-            const experience = document.querySelector('textarea[name="experience"]').value;
-            const recommandation = document.querySelector('input[name="recommandation"]').value;
-            const suggestion = document.querySelector('input[name="suggestion"]').value;
+            const ecoute = document.getElementById("ecoute_value").value.trim();
+            const experience = document.querySelector('textarea[name="experience"]').value.trim();
+            const recommandation = document.querySelector('input[name="recommandation"]').value.trim();
+            const suggestion = document.querySelector('input[name="suggestion"]').value.trim();
     
             // Récupérer les difficultés (cases à cocher)
             const difficulties = Array.from(document.querySelectorAll('input[name="difficultes[]"]:checked'))
                                      .map(el => el.value);
+                                     if (motif === "Autre" && !motifAutre) {
+            alert("Veuillez préciser votre motif de visite.");
+                return;
+            }
+                         
     
             try {
                 await addDoc(collection(db, "avisPatients"), {
@@ -245,27 +248,20 @@
                     experience,
                     recommandation,
                     suggestion,
-                    date: new Date().toISOString() // Ajout de la date
+                    date: new Date().toISOString()
                 });
     
-                alert("Avis enregistré avec succès !");
-                document.querySelector("form").reset(); // Réinitialiser le formulaire
-            } catch (error) {
-                console.error("Erreur lors de l'enregistrement :", error);
-                alert("Une erreur s'est produite, veuillez réessayer.");
-            }
+                window.location.href = "confirmation.html"; // Redirection après envoi
+                } catch (error) {
+                    console.error("Erreur lors de l'enregistrement :", error);
+                    alert("Une erreur s'est produite, veuillez réessayer.");
+                }
         });
     </script>
+    
     
       
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector("form").addEventListener("submit", function(event) {
-                console.log("Formulaire soumis !");
-            });
-        });
-    </script>
     
 </body>
 </html>
