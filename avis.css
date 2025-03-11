@@ -1,3 +1,12 @@
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 .avis-card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
