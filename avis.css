@@ -5,9 +5,6 @@ body {
     background-position: center; /* Centre l'image */
     background-repeat: no-repeat; /* Empêche la répétition */
     background-attachment: fixed; /* Garde l'image en place lors du scroll */
-    margin: 0;
-    padding: 0;
-    display: flex;
     
   
     
