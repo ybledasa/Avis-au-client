@@ -1,164 +1,30 @@
-# Avis-au-client
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('images.jpeg'); /* Vérifie le chemin */
-    background-size: cover; /* Ajuste l'image pour remplir l'écran */
-    background-position: center; /* Centre l'image */
-    background-repeat: no-repeat; /* Empêche la répétition */
-    background-attachment: fixed; /* Garde l'image en place lors du scroll */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+  authDomain: "avis-au-client.firebaseapp.com",
+  databaseURL: "https://avis-au-client-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "avis-au-client",
+  storageBucket: "avis-au-client.firebasestorage.app",
+  messagingSenderId: "291367297087",
+  appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+  measurementId: "G-WESSM7PQZM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 
-form {
-    background: rgba(12, 0, 0, 0.8); /* Fond semi-transparent */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(500px); /* Applique un flou sur le fond */
-    width: 90%;
-    max-width: 600px;
-}
 
+Pour héberger votre site sur Firebase Hosting, vous devez disposer de la CLI Firebase (un outil de ligne de commande).
 
-h1 {
-    text-align: center;
-    color: #f4f4f4;
-    border-radius: 10px;
-    margin-bottom: 10px;
-   
-}
-p {
-    color: #f4f4f4;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-.form {
-    margin-bottom: 15px;
-    
-}
+Exécutez la commande npm pour installer la CLI ou la mettre à jour.
 
-h4 {
-    margin-bottom: 5px;
-    color: #f4f4f4;
-}
-
-input[type="text"], input[type="radio"] {
-    margin-bottom: 10px;
-}
-
-label {
-    margin-right: 10px;
-    font-size: 14px;
-}
-
-.rating {
-    display: flex;
-    justify-content: center;
-}
-
-.rating span {
-    font-size: 25px;
-    cursor: pointer;
-    color: #f4f4f4;
-    transition: color 0.3s;
-}
-
-.rating span:hover,
-.rating span.active {
-    color: gold;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: #007bff;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #007bff;
-}
-
-
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-echo "Le fichier traitement.php est bien appelé !<br>";
-
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-exit();
-?>
-
-
-<?php
-// Connexion à la base de données
-$servername = "localhost";
-$username = "root";  // Remplace par ton identifiant MySQL
-$password = "";      // Remplace par ton mot de passe MySQL
-$dbname = "avis_db";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
-
-// Récupération des données du formulaire
-$nom_prenom = $_POST['nom_prenom'];
-$age = $_POST['age'];
-$sexe = $_POST['sexe'];
-$hopital = $_POST['hopital'];
-$motif = $_POST['motif'];
-$motif_autre = $_POST['motif_autre'];
-$accueil = $_POST['accueil'];
-$attente = $_POST['attente'];
-$ecoute = $_POST['ecoute'];
-$difficultes = isset($_POST['difficultes']) ? implode(", ", $_POST['difficultes']) : "Aucune";
-$experience = $_POST['experience'];
-$recommandation = $_POST['recommandation'];
-$suggestion = $_POST['suggestion'];
-
-// Préparer la requête SQL
-$sql = "INSERT INTO avis_patients (nom_prenom, age, sexe, hopital, motif, motif_autre, accueil, attente, ecoute, difficultes, experience, recommandation, suggestion) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssissssss", $nom_prenom, $age, $sexe, $hopital, $motif, $motif_autre, $accueil, $attente, $ecoute, $difficultes, $experience, $recommandation, $suggestion);
-
-if ($stmt->execute()) {
-    echo "L'avis a été ajouté avec succès !";
-    exit(); // Arrête l'exécution pour voir le message
-} else {
-    echo "Erreur lors de l'ajout de l'avis : " . $conn->error;
-    exit(); // Arrête l'exécution pour voir l'erreur
-}
-
-
-// Exécuter la requête
-if ($stmt->execute()) {
-    header("Location: confirmation.html"); // Redirection après soumission
-    exit();
-} else {
-    echo "Erreur : " . $sql . "<br>" . $conn->error;
-}
-
-
-// Fermer la connexion
-$stmt->close();
-$conn->close();
-?>
+npm install -g firebase-tools

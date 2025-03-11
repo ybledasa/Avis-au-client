@@ -187,6 +187,77 @@
            </div>
         </form>
     </div>
+    <script type="module">
+        // Importer Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    
+        // 🔹 Remplace par TES valeurs Firebase 🔹
+        const firebaseConfig = {
+            apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+            authDomain: "avis-au-client.firebaseapp.com",
+            databaseURL: "https://avis-au-client-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "avis-au-client",
+            storageBucket: "avis-au-client.firebasestorage.app",
+            messagingSenderId: "291367297087",
+            appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+            measurementId: "G-WESSM7PQZM"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    
+        // Gestion du formulaire
+        document.querySelector("form").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Empêcher le rechargement de la page
+    
+            // Récupérer les valeurs du formulaire
+            const nomPrenom = document.querySelector('input[name="nom_prenom"]').value;
+            const age = document.querySelector('input[name="age"]:checked')?.value || "";
+            const sexe = document.querySelector('input[name="sexe"]:checked')?.value || "";
+            const hopital = document.querySelector('select[name="hopital"]').value;
+            const motif = document.querySelector('input[name="motif"]:checked')?.value || "";
+            const motifAutre = document.querySelector('input[name="motif_autre"]').value;
+            const accueil = document.getElementById("accueil_value").value;  // Correctif
+            const attente = document.querySelector('input[name="attente"]:checked')?.value || "";
+            const ecoute = document.getElementById("ecoute_value").value;  // Correctif
+            const experience = document.querySelector('textarea[name="experience"]').value;
+            const recommandation = document.querySelector('input[name="recommandation"]').value;
+            const suggestion = document.querySelector('input[name="suggestion"]').value;
+    
+            // Récupérer les difficultés (cases à cocher)
+            const difficulties = Array.from(document.querySelectorAll('input[name="difficultes[]"]:checked'))
+                                     .map(el => el.value);
+    
+            try {
+                await addDoc(collection(db, "avisPatients"), {
+                    nomPrenom,
+                    age,
+                    sexe,
+                    hopital,
+                    motif,
+                    motifAutre,
+                    accueil,
+                    attente,
+                    ecoute,
+                    difficulties,
+                    experience,
+                    recommandation,
+                    suggestion,
+                    date: new Date().toISOString() // Ajout de la date
+                });
+    
+                alert("Avis enregistré avec succès !");
+                document.querySelector("form").reset(); // Réinitialiser le formulaire
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement :", error);
+                alert("Une erreur s'est produite, veuillez réessayer.");
+            }
+        });
+    </script>
+    
+      
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -195,5 +266,6 @@
             });
         });
     </script>
+    
 </body>
 </html>
