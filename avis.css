@@ -1,14 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('image/avis5.jpg'); /* Vérifie le chemin */
-    background-size: cover; /* Ajuste l'image pour remplir l'écran */
-    background-position: center; /* Centre l'image */
-    background-repeat: no-repeat; /* Empêche la répétition */
-    background-attachment: fixed; /* Garde l'image en place lors du scroll */
-    
-  
-    
-}
+
 
 .hopital-block {
     max-width: 800px; /* Limite la largeur à 800px */
