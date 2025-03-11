@@ -1,6 +1,6 @@
 // 🔹 Importation de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // 🔹 Configuration Firebase
 const firebaseConfig = {
@@ -17,19 +17,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ✅ Fonction pour récupérer et afficher les avis
+// ✅ Fonction pour récupérer et afficher les avis triés par date (du plus récent au plus ancien)
 async function afficherAvis() {
     const avisContainer = document.getElementById("avisContainer");
     avisContainer.innerHTML = "<p>Chargement des avis...</p>";
 
     try {
-        const querySnapshot = await getDocs(collection(db, "avisPatients"));
+        // 🔹 Récupérer les avis en les triant par "date" (du plus récent au plus ancien)
+        const q = query(collection(db, "avisPatients"), orderBy("date", "desc"));
+        const querySnapshot = await getDocs(q);
+
         avisContainer.innerHTML = ""; // Effacer le message de chargement
 
         querySnapshot.forEach((doc) => {
             let data = doc.data();
             
-            // Vérifier si certaines valeurs sont `undefined`
+            // 🔹 Vérifier si certaines valeurs sont `undefined`
             let dateSoumission = data.date ? new Date(data.date).toLocaleString() : "Non précisé";
 
             let avisDiv = document.createElement("div");
