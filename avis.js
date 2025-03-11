@@ -17,8 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let listeAvis = []; // Stocker les avis pour la recherche
-
 // ✅ Fonction pour récupérer et afficher les avis triés par date (du plus récent au plus ancien)
 async function afficherAvis() {
     const avisContainer = document.getElementById("avisContainer");
@@ -29,19 +27,22 @@ async function afficherAvis() {
         const querySnapshot = await getDocs(q);
 
         avisContainer.innerHTML = ""; // Effacer le message de chargement
-        listeAvis = []; // Réinitialiser la liste des avis
+
+        let avisParHopital = {}; // Stocker les avis regroupés par hôpital
 
         querySnapshot.forEach((doc) => {
             let data = doc.data();
             let dateSoumission = data.date ? new Date(data.date).toLocaleString() : "Non précisé";
+            let hopital = data.hopital || "Hôpital non précisé";
 
-            // Ajouter chaque avis à la liste pour permettre la recherche
-            listeAvis.push({
-                id: doc.id,
+            if (!avisParHopital[hopital]) {
+                avisParHopital[hopital] = [];
+            }
+
+            avisParHopital[hopital].push({
                 nom: data.nomPrenom || "Non précisé",
                 date: dateSoumission,
                 sexe: data.sexe || "Non précisé",
-                hopital: data.hopital || "Non précisé",
                 motif: data.motif || "Non précisé",
                 accueil: data.accueil || "Non précisé",
                 attente: data.attente || "Non précisé",
@@ -52,50 +53,41 @@ async function afficherAvis() {
             });
         });
 
-        // Afficher les avis après chargement
-        afficherListeAvis(listeAvis);
+        // 🔹 Afficher les avis regroupés par hôpital
+        for (let hopital in avisParHopital) {
+            let hopitalDiv = document.createElement("div");
+            hopitalDiv.classList.add("hopital-block");
+
+            let hopitalTitle = document.createElement("h2");
+            hopitalTitle.textContent = hopital;
+            hopitalDiv.appendChild(hopitalTitle);
+
+            avisParHopital[hopital].forEach((data) => {
+                let avisDiv = document.createElement("div");
+                avisDiv.classList.add("avis-card");
+                avisDiv.innerHTML = `
+                    <p><strong>Nom :</strong> ${data.nom}</p>
+                    <p><strong>Date :</strong> ${data.date}</p>
+                    <p><strong>Sexe :</strong> ${data.sexe}</p>
+                    <p><strong>Motif :</strong> ${data.motif}</p>
+                    <p><strong>Accueil :</strong> ${data.accueil}</p>
+                    <p><strong>Attente :</strong> ${data.attente}</p>
+                    <p><strong>Écoute :</strong> ${data.ecoute}</p>
+                    <p><strong>Expérience :</strong> ${data.experience}</p>
+                    <p><strong>Recommandation :</strong> ${data.recommandation}</p>
+                    <p><strong>Suggestion :</strong> ${data.suggestion}</p>
+                    <hr>
+                `;
+                hopitalDiv.appendChild(avisDiv);
+            });
+
+            avisContainer.appendChild(hopitalDiv);
+        }
 
     } catch (error) {
         console.error("Erreur lors de la récupération des avis :", error);
         avisContainer.innerHTML = "<p>Erreur lors du chargement des avis.</p>";
     }
-}
-
-// ✅ Fonction pour afficher les avis à partir d'une liste donnée
-function afficherListeAvis(avis) {
-    const avisContainer = document.getElementById("avisContainer");
-    avisContainer.innerHTML = ""; // Vider la liste avant d'afficher les résultats
-
-    avis.forEach((data) => {
-        let avisDiv = document.createElement("div");
-        avisDiv.classList.add("avis-card"); // Ajout d'une classe CSS pour le style
-        avisDiv.innerHTML = `
-            <p><strong>Nom :</strong> ${data.nom}</p>
-            <p><strong>Date :</strong> ${data.date}</p>
-            <p><strong>Sexe :</strong> ${data.sexe}</p>
-            <p><strong>Hôpital :</strong> ${data.hopital}</p>
-            <p><strong>Motif :</strong> ${data.motif}</p>
-            <p><strong>Accueil :</strong> ${data.accueil}</p>
-            <p><strong>Attente :</strong> ${data.attente}</p>
-            <p><strong>Écoute :</strong> ${data.ecoute}</p>
-            <p><strong>Expérience :</strong> ${data.experience}</p>
-            <p><strong>Recommandation :</strong> ${data.recommandation}</p>
-            <p><strong>Suggestion :</strong> ${data.suggestion}</p>
-            <hr>
-        `;
-        avisContainer.appendChild(avisDiv);
-    });
-}
-
-// ✅ Fonction pour filtrer les avis en fonction du texte entré dans la barre de recherche
-function filtrerAvis() {
-    let recherche = document.getElementById("searchInput").value.toLowerCase();
-    let avisFiltres = listeAvis.filter(avis => 
-        avis.nom.toLowerCase().includes(recherche) || 
-        avis.date.toLowerCase().includes(recherche)
-    );
-    
-    afficherListeAvis(avisFiltres);
 }
 
 // 🔹 Exécuter la fonction après le chargement de la page
