@@ -1,10 +1,10 @@
 /* Style du fond */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f4f6f9;
+    background-image: url(image/avis6.jpg);
     color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 0px;
 }
 
 /* Centrage et style du titre */
@@ -30,23 +30,24 @@ h1 {
 #avisContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centre les éléments horizontalement */
+    /*justify-content: center; /* Centre les éléments horizontalement */
     gap: 20px; /* Espacement entre les hôpitaux */
     width: 100%;
+    display: flex; 
 }
 
 /* Bloc Hôpital */
 .hopital-block {
-    display: flex; /* Permet d'aligner le titre + les avis en ligne */
+    
     align-items: flex-start; /* Alignement en haut */
     background: white;
     border-radius: 12px;
-    padding: 20px;
-    margin: 10px;
+    padding: 10px;
+    margin: 5px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in-out;
     width: 90%;
-    max-width: 1000px;
+    max-width: 350px;
 }
 
 .hopital-block:hover {
@@ -59,7 +60,8 @@ h1 {
     font-size: 20px;
     color: #0056b3;
     font-weight: bold;
-    margin-right: 20px; /* Espace entre le titre et les avis */
+    margin-right: 1px; /* Espace entre le titre et les avis */
+    margin-bottom: 0px;
 }
 
 /* Conteneur des avis (colonne 2) */
@@ -79,7 +81,7 @@ h1 {
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
     width: 100%;
-    max-width: 300px; /* Largeur max de chaque avis */
+    max-width: 350px; /* Largeur max de chaque avis */
 }
 
 .avis-card:hover {
