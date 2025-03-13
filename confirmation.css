@@ -1,28 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url(image/avis11.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 .confirmation-container {
-    text-align: center;
-    background: white;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 10px rgba(248, 252, 252, 0.961);
+    text-align: center;
     width: 90%;
     max-width: 500px;
-    margin: 50px auto;
-    
+}
+
+.confirmation-container img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
 }
 
 h1 {
-    color: #28a745;
+    color: #007bff;
+    font-size: 35px;
 }
 
 p {
-    color: #555;
-}
-
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 button {
@@ -30,10 +43,11 @@ button {
     border: none;
     background: #007bff;
     color: white;
-    font-size: 16px;
+    font-size: 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 5px;
 }
 
 button:hover {
