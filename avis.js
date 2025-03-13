@@ -41,7 +41,7 @@ async function afficherAvis() {
 
             avisParHopital[hopital].push({
                 nom: data.nomPrenom || "Non précisé",
-                date: dateSoumission,
+                
                 sexe: data.sexe || "Non précisé",
                 motif: data.motif || "Non précisé",
                 accueil: data.accueil || "Non précisé",
@@ -50,6 +50,7 @@ async function afficherAvis() {
                 experience: data.experience || "Non précisé",
                 recommandation: data.recommandation || "Non précisé",
                 suggestion: data.suggestion || "Aucune",
+                date: dateSoumission,
             });
         });
 
@@ -66,9 +67,7 @@ async function afficherAvis() {
                 let avisDiv = document.createElement("div");
                 avisDiv.classList.add("avis-card");
                 avisDiv.innerHTML = `
-                    <p><strong>Nom :</strong> ${data.nom}</p>
-                    <p><strong>Date :</strong> ${data.date}</p>
-                    <p><strong>Sexe :</strong> ${data.sexe}</p>
+                    
                     <p><strong>Motif :</strong> ${data.motif}</p>
                     <p><strong>Accueil :</strong> ${data.accueil}</p>
                     <p><strong>Attente :</strong> ${data.attente}</p>
@@ -76,6 +75,7 @@ async function afficherAvis() {
                     <p><strong>Expérience :</strong> ${data.experience}</p>
                     <p><strong>Recommandation :</strong> ${data.recommandation}</p>
                     <p><strong>Suggestion :</strong> ${data.suggestion}</p>
+                    <p><strong>Date :</strong> ${data.date}</p>
                     <hr>
                 `;
                 hopitalDiv.appendChild(avisDiv);
