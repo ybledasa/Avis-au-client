@@ -33,17 +33,21 @@ h1 {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    width: 100%;
 }
 
 /* Bloc hôpital */
 .hopital-block {
-    max-width: 700px;
+    max-width: 800px;
     background: white;
     border-radius: 12px;
     padding: 20px;
     margin: 10px auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hopital-block:hover {
@@ -58,15 +62,26 @@ h1 {
     margin-bottom: 15px;
 }
 
+
+/* Conteneur des avis - permet d'aligner les avis horizontalement */
+.avis-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Affiche les avis en colonnes */
+    gap: 15px; /* Espacement entre les avis */
+    width: 100%;
+    justify-content: center; /* Centre les avis */
+}
+
 /* Carte d'avis */
 .avis-card {
     background-color: #ffffff;
     border-left: 5px solid #0056b3;
     border-radius: 8px;
     padding: 15px;
-    margin-bottom: 10px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
+    width: 100%;
+    max-width: 350px; /* Largeur maximale d'un avis */
 }
 
 .avis-card:hover {
@@ -78,6 +93,7 @@ h1 {
     font-size: 14px;
     line-height: 1.6;
     color: #555;
+    margin: 5px 0;
 }
 
 .avis-card strong {
@@ -105,11 +121,11 @@ button:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
-    #searchInput {
-        width: 90%;
-    }
-
     .hopital-block {
         max-width: 95%;
+    }
+
+    .avis-container {
+        grid-template-columns: 1fr; /* Sur mobile, chaque avis prend toute la largeur */
     }
 }
