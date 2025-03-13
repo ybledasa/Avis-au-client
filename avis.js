@@ -54,35 +54,40 @@ async function afficherAvis() {
             });
         });
 
-        // 🔹 Afficher les avis regroupés par hôpital
-        for (let hopital in avisParHopital) {
-            let hopitalDiv = document.createElement("div");
-            hopitalDiv.classList.add("hopital-block");
+       // 🔹 Afficher les avis regroupés par hôpital
+for (let hopital in avisParHopital) {
+    let hopitalDiv = document.createElement("div");
+    hopitalDiv.classList.add("hopital-block");
 
-            let hopitalTitle = document.createElement("h2");
-            hopitalTitle.textContent = hopital;
-            hopitalDiv.appendChild(hopitalTitle);
+    let hopitalTitle = document.createElement("h2");
+    hopitalTitle.textContent = hopital;
+    hopitalDiv.appendChild(hopitalTitle);
 
-            avisParHopital[hopital].forEach((data) => {
-                let avisDiv = document.createElement("div");
-                avisDiv.classList.add("avis-card");
-                avisDiv.innerHTML = `
-                    
-                    <p><strong>Motif :</strong> ${data.motif}</p>
-                    <p><strong>Accueil :</strong> ${data.accueil}</p>
-                    <p><strong>Attente :</strong> ${data.attente}</p>
-                    <p><strong>Écoute :</strong> ${data.ecoute}</p>
-                    <p><strong>Expérience :</strong> ${data.experience}</p>
-                    <p><strong>Recommandation :</strong> ${data.recommandation}</p>
-                    <p><strong>Suggestion :</strong> ${data.suggestion}</p>
-                    <p><strong>Date :</strong> ${data.date}</p>
-                    <hr>
-                `;
-                hopitalDiv.appendChild(avisDiv);
-            });
+    // Créer un conteneur pour aligner les avis
+    let avisContainerDiv = document.createElement("div");
+    avisContainerDiv.classList.add("avis-container");
 
-            avisContainer.appendChild(hopitalDiv);
-        }
+    avisParHopital[hopital].forEach((data) => {
+        let avisDiv = document.createElement("div");
+        avisDiv.classList.add("avis-card");
+        avisDiv.innerHTML = `
+            <p><strong>Motif :</strong> ${data.motif}</p>
+            <p><strong>Accueil :</strong> ${data.accueil}</p>
+            <p><strong>Attente :</strong> ${data.attente}</p>
+            <p><strong>Écoute :</strong> ${data.ecoute}</p>
+            <p><strong>Expérience :</strong> ${data.experience}</p>
+            <p><strong>Recommandation :</strong> ${data.recommandation}</p>
+            <p><strong>Suggestion :</strong> ${data.suggestion}</p>
+            <p><strong>Date :</strong> ${data.date}</p>
+            <hr>
+        `;
+        avisContainerDiv.appendChild(avisDiv);
+    });
+
+    // Ajouter le conteneur des avis à l'hôpital
+    hopitalDiv.appendChild(avisContainerDiv);
+    avisContainer.appendChild(hopitalDiv);
+}
 
     } catch (error) {
         console.error("Erreur lors de la récupération des avis :", error);
