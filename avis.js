@@ -54,7 +54,7 @@ async function afficherAvis() {
             });
         });
 
-       // 🔹 Afficher les avis regroupés par hôpital
+      
 // 🔹 Afficher les avis regroupés par hôpital
 for (let hopital in avisParHopital) {
     let hopitalDiv = document.createElement("div");
