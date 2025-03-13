@@ -55,15 +55,16 @@ async function afficherAvis() {
         });
 
        // 🔹 Afficher les avis regroupés par hôpital
+// 🔹 Afficher les avis regroupés par hôpital
 for (let hopital in avisParHopital) {
     let hopitalDiv = document.createElement("div");
     hopitalDiv.classList.add("hopital-block");
 
-    let hopitalTitle = document.createElement("h2");
+    let hopitalTitle = document.createElement("div");
+    hopitalTitle.classList.add("hopital-title");
     hopitalTitle.textContent = hopital;
-    hopitalDiv.appendChild(hopitalTitle);
 
-    // Créer un conteneur pour aligner les avis
+    // Créer un conteneur pour les avis
     let avisContainerDiv = document.createElement("div");
     avisContainerDiv.classList.add("avis-container");
 
@@ -79,15 +80,18 @@ for (let hopital in avisParHopital) {
             <p><strong>Recommandation :</strong> ${data.recommandation}</p>
             <p><strong>Suggestion :</strong> ${data.suggestion}</p>
             <p><strong>Date :</strong> ${data.date}</p>
-            <hr>
         `;
         avisContainerDiv.appendChild(avisDiv);
     });
 
-    // Ajouter le conteneur des avis à l'hôpital
+    // Ajouter le titre et les avis dans le bloc hôpital
+    hopitalDiv.appendChild(hopitalTitle);
     hopitalDiv.appendChild(avisContainerDiv);
+    
+    // Ajouter le tout au conteneur principal
     avisContainer.appendChild(hopitalDiv);
 }
+
 
     } catch (error) {
         console.error("Erreur lors de la récupération des avis :", error);
