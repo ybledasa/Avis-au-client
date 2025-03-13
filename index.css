@@ -1,9 +1,16 @@
+@font-face {
+    font-family: 'MaPolice';
+    src: url('fonts/mapolice.woff2') format('woff2'),
+         url('fonts/mapolice.woff') format('woff');
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-image: url(image/avis9.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    font-size: clamp(14px, 2vw, 18px);
     margin: 0;
     padding: 0;
     display: flex;
@@ -67,4 +74,18 @@ button {
 
 button:hover {
     background: #0056b3;
+}
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        background-size: contain;
+        background-position: top;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .home-container {
+        width: 95%;
+        padding: 20px;
+    }
 }
