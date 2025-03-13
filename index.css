@@ -26,9 +26,9 @@ body::before {
 }
 
 .home-container {
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(248, 252, 252, 0.961);
     text-align: center;
     width: min(90%, 500px);
     margin: 0 auto;
