@@ -101,6 +101,44 @@ body {
 .nav-links a:hover {
     text-decoration: underline;
 }
+/* ✅ Section des statistiques */
+.stats-section {
+    background: #000; /* Fond sombre */
+    color: white;
+    padding: 80px 10%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.stats-left, .stats-right {
+    width: 45%;
+}
+
+.stats-left h2, .stats-right h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.stats-left p, .stats-right p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.stats-right span {
+    font-size: 26px;
+    font-weight: bold;
+    color: #00d4ff;
+}
 
         /* ✅ Section des hôpitaux */
         .hospitals-section {
@@ -138,6 +176,64 @@ body {
         .hospital-card p {
             color: #666;
         }
+        /* ✅ Footer */
+.footer {
+    background: #111;
+    color: white;
+    padding: 50px 10%;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-left, .footer-middle, .footer-right {
+    width: 30%;
+    text-align: left;
+}
+
+.footer h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.footer p, .footer ul {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 5px;
+}
+
+.footer ul li a {
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer ul li a:hover {
+    text-decoration: underline;
+    color: #00d4ff;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #222;
+    margin-top: 20px;
+    font-size: 14px;
+}
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
@@ -181,5 +277,24 @@ body {
 
     .hospital-list {
         grid-template-columns: 1fr;
+    }
+    .stats-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stats-left, .stats-right {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-left, .footer-middle, .footer-right {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
     }
 }
