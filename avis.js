@@ -165,6 +165,67 @@ for (let hopital in avisParHopital) {
         avisContainer.innerHTML = "<p>Erreur lors du chargement des avis.</p>";
     }
 }
+// ✅ Fonction pour récupérer et afficher les hôpitaux les mieux et les moins bien notés
+async function afficherHopitaux() {
+    const topContainer = document.getElementById("hospitalsTop");
+    const worstContainer = document.getElementById("hospitalsWorst");
+
+    topContainer.innerHTML = "<p>Chargement...</p>";
+    worstContainer.innerHTML = "<p>Chargement...</p>";
+
+    try {
+        const q = query(collection(db, "avisPatients"), orderBy("date", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        let hopitaux = {};
+
+        // 🔹 Parcourir les avis et classer par hôpital
+        querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            let hopital = data.hopital || "Hôpital non précisé";
+            let note = parseFloat(data.recommandation) || 0;
+
+            if (!hopitaux[hopital]) {
+                hopitaux[hopital] = { total: 0, count: 0 };
+            }
+
+            hopitaux[hopital].total += note;
+            hopitaux[hopital].count++;
+        });
+
+        // 🔹 Trier les hôpitaux selon la note moyenne
+        let hopitauxArray = Object.keys(hopitaux).map(hopital => ({
+            nom: hopital,
+            noteMoyenne: hopitaux[hopital].count > 0 ? (hopitaux[hopital].total / hopitaux[hopital].count).toFixed(1) : "N/A"
+        }));
+
+        // 🔹 Séparer les meilleurs et les moins bien notés
+        let hopitauxTop = hopitauxArray.sort((a, b) => b.noteMoyenne - a.noteMoyenne).slice(0, 4);
+        let hopitauxWorst = hopitauxArray.sort((a, b) => a.noteMoyenne - b.noteMoyenne).slice(0, 4);
+
+        // 🔹 Fonction pour générer une carte hôpital
+        function creerCarteHopital(hopital) {
+            return `
+                <div class="hospital-card">
+                    <h3>${hopital.nom}</h3>
+                    <p>⭐ ${hopital.noteMoyenne}/5</p>
+                </div>
+            `;
+        }
+
+        // 🔹 Remplir les sections
+        topContainer.innerHTML = hopitauxTop.map(creerCarteHopital).join("");
+        worstContainer.innerHTML = hopitauxWorst.map(creerCarteHopital).join("");
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des hôpitaux :", error);
+        topContainer.innerHTML = "<p>Erreur de chargement.</p>";
+        worstContainer.innerHTML = "<p>Erreur de chargement.</p>";
+    }
+}
+
+// 🔹 Exécuter après le chargement de la page
+document.addEventListener("DOMContentLoaded", afficherHopitaux);
 
 // 🔹 Exécuter la fonction après le chargement de la page
 document.addEventListener("DOMContentLoaded", afficherAvis);

@@ -145,42 +145,53 @@ html, body {
     color: #00d4ff;
 }
 
-        /* ✅ Section des hôpitaux */
-        .hospitals-section {
-            padding: 50px;
-            text-align: center;
-        }
+.hospitals-section {
+    padding: 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .hospitals-section h2 {
-            font-size: 28px;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
+.hospital-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
 
-        .hospital-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
+.hospital-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    width: 250px;
+    min-width: 200px;
+    flex: 1;
+    max-width: 300px;
+}
 
-        .hospital-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
 
-        .hospital-card h3 {
-            color: #333;
-            margin-bottom: 10px;
-        }
+/* ✅ Mettre les cartes en ligne */
+.hospital-list {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si besoin */
+    gap: 20px;
+    justify-content: flex-start; /* Alignement à gauche */
+}
 
-        .hospital-card p {
-            color: #666;
-        }
+
+
+.hospital-card h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.hospital-card p {
+    color: #666;
+    font-size: 14px;
+}
+
         /* ✅ Footer */
 .footer {
     background: #111;
