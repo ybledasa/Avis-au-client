@@ -5,149 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - Avis Patients</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        /* ✅ Styles globaux */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* ✅ Navbar avec image de fond */
-        .navbar {
-            width: 100%;
-            height: 100vh; /* Pleine hauteur de l'écran */
-            background: url('image/avis9.jpg') no-repeat center/cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            padding-top: 60px;
-        }
-
-        /* ✅ Overlay pour assombrir l'image de fond */
-        .navbar::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Ajoute un effet assombri */
-            z-index: 1;
-        }
-
-        /* ✅ Contenu de la navbar (textes + bouton) */
-        .navbar-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-            max-width: 800px;
-            padding: 20px;
-        }
-
-        .navbar h1 {
-            font-size: 36px;
-            margin-bottom: 15px;
-        }
-
-        .navbar p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .navbar button {
-            padding: 12px 20px;
-            border: none;
-            background: #007bff;
-            color: white;
-            font-size: 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease-in-out;
-        }
-
-        .navbar button:hover {
-            background: #0056b3;
-        }
-
-        /* ✅ Navbar en haut */
-        .navbar-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 3;
-        }
-
-        .logo a {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* ✅ Responsive */
-        @media (max-width: 768px) {
-            .navbar h1 {
-                font-size: 28px;
-            }
-
-            .navbar p {
-                font-size: 16px;
-            }
-
-            .navbar button {
-                font-size: 18px;
-            }
-
-            .nav-links {
-                flex-direction: column;
-                background: rgba(0, 0, 0, 0.8);
-                position: absolute;
-                top: 60px;
-                right: 0;
-                width: 100%;
-                text-align: center;
-                padding: 10px 0;
-                display: none;
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: block;
-                font-size: 28px;
-                cursor: pointer;
-                color: white;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
@@ -168,16 +26,53 @@
 
         <!-- ✅ Contenu centré sur l'image -->
         <div class="navbar-content">
-            <h1>Bienvenue sur la plateforme d'avis des patients</h1>
+            <h1>Bienvenue sur la plateforme</h1>
             <p>Nous recueillons vos avis pour améliorer la qualité des soins. Partagez votre expérience dès maintenant.</p>
             <button onclick="voirAvis()">Voir la liste des avis</button>
         </div>
 
     </nav>
+     <!-- ✅ Section Hôpitaux les mieux notés -->
+     <section class="hospitals-section">
+        <h2>🏆 Les hôpitaux les mieux notés</h2>
+        <div class="hospital-list">
+            <div class="hospital-card">
+                <h3>Hôpital Saint-Paul</h3>
+                <p>⭐ 4.8/5 - Excellent service</p>
+            </div>
+            <div class="hospital-card">
+                <h3>Clinique Bellevue</h3>
+                <p>⭐ 4.7/5 - Soins de qualité</p>
+            </div>
+            <div class="hospital-card">
+                <h3>Centre Médical Alpha</h3>
+                <p>⭐ 4.6/5 - Personnel attentif</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✅ Section Hôpitaux les moins bien notés -->
+    <section class="hospitals-section">
+        <h2>⚠️ Les hôpitaux les moins bien notés</h2>
+        <div class="hospital-list">
+            <div class="hospital-card">
+                <h3>Hôpital Général B</h3>
+                <p>⭐ 2.3/5 - Longues attentes</p>
+            </div>
+            <div class="hospital-card">
+                <h3>Clinique du Sud</h3>
+                <p>⭐ 2.0/5 - Manque d'hygiène</p>
+            </div>
+            <div class="hospital-card">
+                <h3>Dispensaire Croix Rouge</h3>
+                <p>⭐ 1.8/5 - Mauvaise organisation</p>
+            </div>
+        </div>
+    </section>
     
     <script>
         function voirAvis() {
-            window.location.href = "avis.html"; // Redirige vers la liste des avis
+            window.location.href = "avis"; // Redirige vers la liste des avis
         }
     </script>
 

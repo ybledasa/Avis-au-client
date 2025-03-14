@@ -1,99 +1,86 @@
-@font-face {
-    font-family: 'MaPolice';
-    src: url('fonts/mapolice.woff2') format('woff2'),
-         url('fonts/mapolice.woff') format('woff');
-}
-
+/* ✅ Styles globaux */
 body {
     font-family: 'Poppins', sans-serif;
-    
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    font-size: clamp(14px, 2vw, 18px);
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    position: relative; /* Important pour l'overlay */
 }
 
-body::before {
+/* ✅ Navbar avec image de fond */
+.navbar {
+    width: 100%;
+    height: 100vh; /* Pleine hauteur de l'écran */
+    background: url('image/avis9.jpg') no-repeat center/cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding-top: 60px;
+}
+
+/* ✅ Overlay pour assombrir l'image de fond */
+.navbar::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /*background: rgba(0, 0, 0, 0.4); /* Assombrit légèrement l’image */
-    z-index: -1;
-}
-/* ✅ Home-container pleine largeur */
-.home-container {
-    width: 100%; /* Utilise toute la largeur */
-    max-width: none; /* Supprime toute limite de largeur */
-    padding: 50px 10%;
-    background: rgba(255, 255, 255, 0.8); /* Légèrement transparent */
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.5); /* Ajoute un effet assombri */
+    z-index: 1;
 }
 
-.home-container img {
-    width: 20px;
-    height: auto;
+/* ✅ Contenu de la navbar (textes + bouton) */
+.navbar-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.navbar h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.navbar p {
+    font-size: 18px;
     margin-bottom: 20px;
 }
 
-h1 {
-    color: #007bff;
-    font-size: 35px;
-}
-
-p {
-    color: #0e0c0c;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 10px 15px;
+.navbar button {
+    padding: 12px 20px;
     border: none;
     background: #007bff;
     color: white;
     font-size: 20px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
-    margin: 5px;
+    transition: background 0.3s ease-in-out;
 }
 
-button:hover {
+.navbar button:hover {
     background: #0056b3;
 }
-/* ✅ Navbar */
-.navbar {
-    background: transparent;
-    position: absolute; /* Pour qu'elle s'affiche au-dessus de l'image */
-    width: 100%;
+
+/* ✅ Navbar en haut */
+.navbar-top {
+    position: absolute;
     top: 0;
     left: 0;
-    padding: 5px 10px;
-    z-index: 1000;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
 }
-.nav-links a, .logo a {
-    color: white; /* Pour assurer la visibilité sur l'image */
-}
-
-
-
 
 .logo a {
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
     text-decoration: none;
 }
@@ -101,11 +88,7 @@ button:hover {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 20px;
-}
-
-.nav-links li {
-    display: inline-block;
+    gap: 25px;
 }
 
 .nav-links a {
@@ -116,30 +99,70 @@ button:hover {
 }
 
 .nav-links a:hover {
-    color: #f8f9fa;
     text-decoration: underline;
 }
 
-/* ✅ Menu burger pour mobile */
-.menu-toggle {
-    display: none;
-    font-size: 26px;
-    cursor: pointer;
-    color: white;
-}
+        /* ✅ Section des hôpitaux */
+        .hospitals-section {
+            padding: 50px;
+            text-align: center;
+        }
+
+        .hospitals-section h2 {
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .hospital-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .hospital-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .hospital-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .hospital-card p {
+            color: #666;
+        }
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
+    .navbar h1 {
+        font-size: 28px;
+    }
+
+    .navbar p {
+        font-size: 16px;
+    }
+
+    .navbar button {
+        font-size: 18px;
+    }
+
     .nav-links {
-        display: none;
         flex-direction: column;
+        background: rgba(0, 0, 0, 0.8);
         position: absolute;
         top: 60px;
         right: 0;
-        background: #007bff;
         width: 100%;
         text-align: center;
         padding: 10px 0;
+        display: none;
     }
 
     .nav-links.show {
@@ -148,35 +171,15 @@ button:hover {
 
     .menu-toggle {
         display: block;
+        font-size: 28px;
+        cursor: pointer;
+        color: white;
     }
-}
-/* ✅ Ajuster l'image d'accueil pour qu'elle prenne toute la largeur */
-.hero-section {
-    width: 100%;
-    height: 100vh; /* Prend toute la hauteur de l'écran */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-section img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-@media (max-width: 768px) {
-    body {
-        font-size: 14px;
-        background-size: contain;
-        background-position: top;
-        flex-direction: column;
-        padding: 10px;
+    .hospitals-section {
+        padding: 30px;
     }
 
-    .home-container {
-        width: 95%;
-        padding: 20px;
+    .hospital-list {
+        grid-template-columns: 1fr;
     }
 }
