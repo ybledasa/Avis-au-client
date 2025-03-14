@@ -40,8 +40,7 @@ async function afficherAvis() {
             }
 
             avisParHopital[hopital].push({
-                nom: data.nomPrenom || "Non précisé",
-                
+                nom: data.nomPrenom || "Anonyme",
                 sexe: data.sexe || "Non précisé",
                 motif: data.motif || "Non précisé",
                 accueil: data.accueil || "Non précisé",
@@ -53,8 +52,27 @@ async function afficherAvis() {
                 date: dateSoumission,
             });
         });
+// Fonction pour formater la date correctement
+function formaterDate(dateStr) {
+    if (!dateStr) {
+        return "Date non précisée"; // Gère les cas où la date est absente
+    }
 
-      
+    let date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+        return "Date invalide"; // Si la date est mal formatée
+    }
+
+    return date.toLocaleDateString("fr-FR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+
 // 🔹 Afficher les avis regroupés par hôpital
 for (let hopital in avisParHopital) {
     let hopitalDiv = document.createElement("div");
@@ -64,14 +82,53 @@ for (let hopital in avisParHopital) {
     hopitalTitle.classList.add("hopital-title");
     hopitalTitle.textContent = hopital;
 
-    // Créer un conteneur pour les avis
-    let avisContainerDiv = document.createElement("div");
-    avisContainerDiv.classList.add("avis-container");
+    // Créer un div pour afficher l'avis sélectionné
+    let avisDiv = document.createElement("div");
+    avisDiv.classList.add("avis-card");
 
-    avisParHopital[hopital].forEach((data) => {
-        let avisDiv = document.createElement("div");
-        avisDiv.classList.add("avis-card");
+    // Créer un conteneur pour la liste déroulante
+    let avisSelectContainer = document.createElement("div");
+    avisSelectContainer.classList.add("avis-select-container");
+
+    // Créer la liste déroulante pour sélectionner un avis
+    let avisSelect = document.createElement("select");
+    avisSelect.classList.add("avis-select");
+
+    // Ajouter une option par défaut "Voir plus d'avis"
+    let defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Voir plus d'avis";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    avisSelect.appendChild(defaultOption);
+
+    // Ajouter les avis dans la liste déroulante et gérer l'affichage
+    avisParHopital[hopital].forEach((data, index) => {
+        let option = document.createElement("option");
+        option.value = index;
+        option.textContent = `Avis ${index + 1}`;
+        avisSelect.appendChild(option);
+    });
+      // Fonction pour formater la date correctement
+      function formaterDate(dateStr) {
+        let date = new Date(dateStr);
+        return date.toLocaleDateString("fr-FR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+    // Fonction pour mettre à jour l'affichage de l'avis sélectionné
+    function mettreAJourAvis(index) {
+        let data = avisParHopital[hopital][index];
+
         avisDiv.innerHTML = `
+            <div class="avis-header">
+                <i class="fa-solid fa-user-circle avis-icon"></i> 
+                <span>Avis Anonyme</span>
+            </div>
             <p><strong>Motif :</strong> ${data.motif}</p>
             <p><strong>Accueil :</strong> ${data.accueil}</p>
             <p><strong>Attente :</strong> ${data.attente}</p>
@@ -79,19 +136,29 @@ for (let hopital in avisParHopital) {
             <p><strong>Expérience :</strong> ${data.experience}</p>
             <p><strong>Recommandation :</strong> ${data.recommandation}</p>
             <p><strong>Suggestion :</strong> ${data.suggestion}</p>
-            <p><strong>Date :</strong> ${data.date}</p>
+            <p>${formaterDate(data.date)}</p>
         `;
-        avisContainerDiv.appendChild(avisDiv);
-    });
+    }
+  // Afficher le premier avis par défaut
+  mettreAJourAvis(0);
 
-    // Ajouter le titre et les avis dans le bloc hôpital
-    hopitalDiv.appendChild(hopitalTitle);
-    hopitalDiv.appendChild(avisContainerDiv);
-    
-    // Ajouter le tout au conteneur principal
-    avisContainer.appendChild(hopitalDiv);
+  // Masquer le sélecteur si l'hôpital n'a qu'un seul avis
+  if (avisParHopital[hopital].length > 1) {
+      avisSelect.addEventListener("change", function () {
+          mettreAJourAvis(this.value);
+      });
+
+      avisSelectContainer.appendChild(avisSelect);
+  }
+
+  // Ajouter les éléments au bloc hôpital
+  hopitalDiv.appendChild(hopitalTitle);
+  hopitalDiv.appendChild(avisDiv);
+  hopitalDiv.appendChild(avisSelectContainer); // ✅ Sélecteur en bas du bloc
+
+  // Ajouter le bloc hôpital au conteneur principal
+  avisContainer.appendChild(hopitalDiv);
 }
-
 
     } catch (error) {
         console.error("Erreur lors de la récupération des avis :", error);

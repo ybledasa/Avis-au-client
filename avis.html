@@ -6,6 +6,8 @@
     <title>Liste des avis</title>
     <script type="module" src="avis.js"></script> 
     <link rel="stylesheet" href="avis.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> 
+
 </head>
 <body>
     <h1>Liste des Avis</h1>
@@ -14,7 +16,7 @@
 <div id="avisContainer">
     <p>Chargement des avis...</p>
 </div>
-
+<button onclick="allerAuFormulaire()">Donner mon avis</button>
 <button onclick="retourAccueil()">Retour à l'accueil</button>
 </div>
 
@@ -22,6 +24,9 @@
     function retourAccueil() {
         window.location.href = "index.html";
     }
+    function allerAuFormulaire() {
+            window.location.href = "formulaire.html"; // Redirection vers le formulaire
+        }
 </script>
 </body>
 </html>
