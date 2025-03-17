@@ -313,4 +313,21 @@ html, body {
         margin-bottom: 20px;
         text-align: center;
     }
+    .menu-toggle {
+        display: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 4;
+    }
+    
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+        }
+    }
+    
 }

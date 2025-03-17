@@ -17,10 +17,12 @@
             <div class="logo">
                 <a href="index.html">Avis Patients</a>
             </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
             <ul class="nav-links">
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="formulaire.html">Donner un Avis</a></li>
-                <li><a href="avis.html">Voir les Avis</a></li>
+                <li><a href="avis.html">Liste des Avis</a></li>
             </ul>
         </div>
 
@@ -35,12 +37,19 @@
     
 
  
-  
+    <script>
+        function toggleMenu() {
+            let navLinks = document.querySelector(".nav-links");
+            navLinks.classList.toggle("show");
+        }
+    </script>
+    
     <script>
         function voirAvis() {
             window.location.href = "avis.html"; // Redirige vers la liste des avis
         }
     </script>
+
 
 </body>
 </html>
