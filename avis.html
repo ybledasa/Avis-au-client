@@ -15,52 +15,52 @@
     <!-- Barre de recherche -->
     <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..." onkeyup="filtrerAvis()">
 
-    <!-- Conteneur des avis -->
-    <div id="avisContainer">
-        <p>Chargement des avis...</p>
+    <!-- Conteneur principal -->
+    <div class="main-container">
+        <!-- ✅ Section des filtres -->
+        <div class="filtrage-container">
+            <div class="filtre-card">
+                <h3>Note</h3>
+                <div class="filtre-options">
+                    <button class="filtre-btn actif" data-note="all">Toutes</button>
+                    <button class="filtre-btn" data-note="3">★ 3,0+</button>
+                    <button class="filtre-btn" data-note="4">★ 4,0+</button>
+                    <button class="filtre-btn" data-note="4.5">★ 4,5+</button>
+                </div>
+            </div>
+    
+            <div class="filtre-card">
+                <h3>Emplacement</h3>
+                <select id="emplacement-filtre">
+                    <option value="all">Tous</option>
+                    <option value="Abidjan">Abidjan</option>
+                    <option value="Yopougon">Yopougon</option>
+                </select>
+                <input type="text" id="search-location" placeholder="Ville ou code postal">
+            </div>
+    
+            <div class="filtre-card">
+                <h3>Catégories associées</h3>
+                <ul id="categories-list">
+                    <li><a href="#">Urgence</a> (329)</li>
+                    <li><a href="#">Maternité</a> (61)</li>
+                    <li><a href="#">Chirurgie</a> (192)</li>
+                    <li><a href="#">Pédiatrie</a> (40)</li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- ✅ Section des avis -->
+        <div id="avisContainer">
+            <p>Chargement des avis...</p>
+        </div>
     </div>
 
-    <!-- Boutons -->
+    <!-- Boutons d'action -->
     <div class="button-container">
         <button onclick="allerAuFormulaire()">Donner mon avis</button>
         <button onclick="retourAccueil()">Retour à l'accueil</button>
     </div>
-    <!-- ✅ Section de filtrage et catégories -->
-<div class="filtrage-container">
-    <!-- ✅ Section Notes -->
-    <div class="filtre-card">
-        <h3>Note</h3>
-        <div class="filtre-options">
-            <button class="filtre-btn actif">Toutes</button>
-            <button class="filtre-btn" data-note="3">★ 3,0+</button>
-            <button class="filtre-btn" data-note="4">★ 4,0+</button>
-            <button class="filtre-btn" data-note="4.5">★ 4,5+</button>
-        </div>
-    </div>
-
-    <!-- ✅ Section Emplacement -->
-    <div class="filtre-card">
-        <h3>Emplacement</h3>
-        <select id="emplacement-filtre">
-            <option value="all">Tous</option>
-            <option value="Abidjan">Abidjan</option>
-            <option value="Yopougon">Yopougon</option>
-        </select>
-        <input type="text" id="search-location" placeholder="Ville ou code postal">
-    </div>
-
-    <!-- ✅ Section Catégories -->
-    <div class="filtre-card">
-        <h3>Catégories associées</h3>
-        <ul id="categories-list">
-            <li><a href="#">Urgence</a> (329)</li>
-            <li><a href="#">Maternité</a> (61)</li>
-            <li><a href="#">Chirurgie</a> (192)</li>
-            <li><a href="#">Pédiatrie</a> (40)</li>
-        </ul>
-    </div>
-</div>
-
 
     <script>
         function retourAccueil() {

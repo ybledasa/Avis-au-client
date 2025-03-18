@@ -193,12 +193,85 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}/* ✅ Conteneur principal */
+.main-container {
+    display: flex;
+    justify-content: space-between; /* Aligner les avis et les filtres */
+    align-items: flex-start; /* Alignement en haut */
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
 }
+
+/* ✅ Ajuster la section des filtres */
+.filtrage-container {
+    width: 280px; /* Largeur fixe pour la section filtres */
+    flex-shrink: 0; /* Empêche la réduction des filtres */
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Ajuster la section des avis */
+#avisContainer {
+    flex-grow: 1; /* Prend toute la place restante */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Cartes d'avis */
+.avis-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    width: 100%;
+    border-left: 5px solid #007bff;
+}
+
+.avis-card:hover {
+    transform: scale(1.02);
+}
+
+/* ✅ Logo de l'hôpital */
+.avis-logo {
+    width: 70px;
+    height: 70px;
+    background: #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+}
+
+
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
     .avis-card {
         flex-direction: column;
         align-items: flex-start;
+    }
+    .main-container {
+        flex-direction: column; /* Les filtres passent au-dessus */
+        align-items: center;
+    }
+
+    .filtrage-container {
+        width: 100%; /* Les filtres prennent toute la largeur */
+        margin-bottom: 20px;
     }
 }
