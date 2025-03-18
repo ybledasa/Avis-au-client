@@ -12,7 +12,7 @@ html, body {
 /* ✅ Navbar avec image de fond */
 .navbar {
     width: 100%;
-    height: 100vh; /* Pleine hauteur de l'écran */
+    min-height: 100vh;
     background: url('image/avis9.jpg') no-repeat center/cover;
     display: flex;
     flex-direction: column;
@@ -106,6 +106,104 @@ html, body {
 .nav-links a:hover {
     text-decoration: none;
 }
+.recent-reviews,
+.best-hospitals {
+    padding: 20px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+#recent-avis-container,
+#best-hospitals-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.avis-card,
+.hopital-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    text-align: left;
+}
+
+.service-block {
+    margin-top: 20px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#voir-plus {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#voir-plus:hover {
+    background-color: #0056b3;
+}
+
+.services {
+    padding: 20px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+#services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.service-block {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    text-align: center;
+}
+
+.service-block h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.service-block p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.service-block button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.service-block button:hover {
+    background-color: #0056b3;
+}
+
+
 /* ✅ Section des statistiques */
 .stats-section {
     background: #000; /* Fond sombre */
@@ -249,85 +347,66 @@ html, body {
     border-top: 1px solid #222;
     margin-top: 20px;
     font-size: 14px;
+}    
+/* ✅ Bouton Menu Burger */
+.menu-toggle {
+    display: none; /* Caché sur les grands écrans */
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 10;
 }
 
 /* ✅ Responsive */
-@media (max-width: 768px) {
+@media (max-height: 600px) {
+    .navbar {
+        min-height: auto; /* ✅ Permet au contenu de s’adapter */
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .navbar-content {
+        padding: 10px;
+    }
+
     .navbar h1 {
-        font-size: 28px;
+        font-size: 24px;
     }
 
     .navbar p {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .navbar button {
-        font-size: 18px;
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+    .menu-toggle {
+        display: block; /* Affiche le menu burger sur mobile */
     }
 
     .nav-links {
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.9);
         position: absolute;
         top: 60px;
         right: 0;
         width: 100%;
         text-align: center;
         padding: 10px 0;
-        display: none;
+        display: none; /* Masqué par défaut */
+        z-index: 9;
     }
 
     .nav-links.show {
-        display: flex;
+        display: flex; /* ✅ Le menu s'affiche quand il a la classe 'show' */
     }
 
-    .menu-toggle {
-        display: block;
-        font-size: 28px;
-        cursor: pointer;
-        color: white;
+    .nav-links li {
+        padding: 10px 0;
     }
-    .hospitals-section {
-        padding: 30px;
-    }
-
-    .hospital-list {
-        grid-template-columns: 1fr;
-    }
-    .stats-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .stats-left, .stats-right {
-        width: 100%;
-        margin-bottom: 30px;
-    }
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-left, .footer-middle, .footer-right {
-        width: 100%;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-    .menu-toggle {
-        display: none;
-        font-size: 28px;
-        cursor: pointer;
-        color: white;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        z-index: 4;
-    }
-    
-    @media (max-width: 768px) {
-        .menu-toggle {
-            display: block;
-        }
-    }
-    
 }

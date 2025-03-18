@@ -3,30 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des avis</title>
+    <title>Liste des Avis</title>
     <script type="module" src="avis.js"></script> 
     <link rel="stylesheet" href="avis.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> 
-
 </head>
 <body>
+
     <h1>Liste des Avis</h1>
 
-    <input type="text" id="searchInput" placeholder="Rechercher .." onkeyup="filtrerAvis()">
-<div id="avisContainer">
-    <p>Chargement des avis...</p>
-</div>
-<button onclick="allerAuFormulaire()">Donner mon avis</button>
-<button onclick="retourAccueil()">Retour à l'accueil</button>
+    <!-- Barre de recherche -->
+    <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..." onkeyup="filtrerAvis()">
+
+    <!-- Conteneur des avis -->
+    <div id="avisContainer">
+        <p>Chargement des avis...</p>
+    </div>
+
+    <!-- Boutons -->
+    <div class="button-container">
+        <button onclick="allerAuFormulaire()">Donner mon avis</button>
+        <button onclick="retourAccueil()">Retour à l'accueil</button>
+    </div>
+    <!-- ✅ Section de filtrage et catégories -->
+<div class="filtrage-container">
+    <!-- ✅ Section Notes -->
+    <div class="filtre-card">
+        <h3>Note</h3>
+        <div class="filtre-options">
+            <button class="filtre-btn actif">Toutes</button>
+            <button class="filtre-btn" data-note="3">★ 3,0+</button>
+            <button class="filtre-btn" data-note="4">★ 4,0+</button>
+            <button class="filtre-btn" data-note="4.5">★ 4,5+</button>
+        </div>
+    </div>
+
+    <!-- ✅ Section Emplacement -->
+    <div class="filtre-card">
+        <h3>Emplacement</h3>
+        <select id="emplacement-filtre">
+            <option value="all">Tous</option>
+            <option value="Abidjan">Abidjan</option>
+            <option value="Yopougon">Yopougon</option>
+        </select>
+        <input type="text" id="search-location" placeholder="Ville ou code postal">
+    </div>
+
+    <!-- ✅ Section Catégories -->
+    <div class="filtre-card">
+        <h3>Catégories associées</h3>
+        <ul id="categories-list">
+            <li><a href="#">Urgence</a> (329)</li>
+            <li><a href="#">Maternité</a> (61)</li>
+            <li><a href="#">Chirurgie</a> (192)</li>
+            <li><a href="#">Pédiatrie</a> (40)</li>
+        </ul>
+    </div>
 </div>
 
-<script>
-    function retourAccueil() {
-        window.location.href = "index.html";
-    }
-    function allerAuFormulaire() {
-            window.location.href = "formulaire.html"; // Redirection vers le formulaire
+
+    <script>
+        function retourAccueil() {
+            window.location.href = "index.html";
         }
-</script>
+        function allerAuFormulaire() {
+            window.location.href = "formulaire.html";
+        }
+    </script>
+
 </body>
 </html>
