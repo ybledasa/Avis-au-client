@@ -1,52 +1,190 @@
 /* ✅ Styles généraux */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f9f9f9;
     color: #333;
     margin: 0;
     padding: 0;
+    
+}
+/* ✅ Navbar avec image de fond */
+.navbar {
+    width: 100%;
+    height: 70px;
+    background: #007bff; /* Noir */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* ✅ Répartir les éléments */
+    padding: 0 40px;
+    
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
-/* ✅ Titre */
-h1 {
-    text-align: center;
-    color: #0056b3;
-    margin-bottom: 20px;
+
+/* ✅ Conteneur interne de la navbar */
+.navbar-content {
+    display: flex;
+    margin-top: 0px;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    z-index: 2;
 }
 
-/* ✅ Barre de recherche */
+/* ✅ Logo à gauche */
+.logo a {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+/* ✅ Barre de recherche au centre */
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
 #searchInput {
-    display: block;
-    width: 60%;
+    width: 1000%;
     max-width: 400px;
-    margin: 0 auto 20px;
-    padding: 10px;
+    padding: 6px 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 5px;
     outline: none;
+    text-align: center;
 }
 
-/* ✅ Conteneur principal */
-#avisContainer {
+/* ✅ Boutons à droite */
+.button-container {
     display: flex;
-    flex-direction: column;
     gap: 15px;
-    padding: 200px;
-    max-width: 1000px;
+}
+
+.button-container button {
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: white;
+    color: #007bff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+/* ✅ Section Titre */
+.section-titre {
+    background-image: url(image/avis13.jpg);
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.section-titre .container {
+    max-width: 1200px;
     margin: auto;
 }
 
-/* ✅ Cartes d'avis (format horizontal) */
+/* ✅ Fil d'Ariane */
+.breadcrumb {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.breadcrumb a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* ✅ Titre principal */
+.section-titre h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #222;
+    margin: 10px 0;
+}
+
+/* ✅ Sous-titre */
+.sous-titre {
+    font-size: 16px;
+    color: #555;
+}
+
+
+/* ✅ Conteneur principal */
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 100px;
+}
+
+/* ✅ Section des filtres */
+.filtrage-container {
+    width: 280px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Titres des filtres */
+.filtre-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+/* ✅ Options des filtres */
+.filtre-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filtre-btn {
+    background: #ddd;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filtre-btn.actif {
+    background: #007bff;
+    color: white;
+}
+
+/* ✅ Section des avis */
+#avisContainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Cartes d'avis */
 .avis-card {
     display: flex;
     align-items: center;
     background: white;
     border-radius: 8px;
-    padding: 15px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
-    width: 100%;
     border-left: 5px solid #007bff;
 }
 
@@ -56,20 +194,20 @@ h1 {
 
 /* ✅ Logo de l'hôpital */
 .avis-logo {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     background: #ddd;
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
     margin-right: 15px;
 }
 
-/* ✅ Contenu de l'avis */
+/* ✅ Contenu des avis */
 .avis-content {
     flex: 1;
 }
@@ -81,7 +219,7 @@ h1 {
     font-size: 16px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .avis-stars {
@@ -90,188 +228,52 @@ h1 {
     margin-bottom: 5px;
 }
 
-.avis-count {
-    font-size: 14px;
-    color: #666;
-}
-
 .avis-card p {
     font-size: 14px;
-    line-height: 1.4;
     color: #555;
     margin: 5px 0;
 }
-/* ✅ Conteneur principal */
-.filtrage-container {
-    display: flex;
-    flex-direction: column;
-    width: 250px;
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ Section de chaque filtre */
-.filtre-card {
-    margin-bottom: 20px;
-}
-
-/* ✅ Titres */
-.filtre-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-/* ✅ Boutons de filtre */
-.filtre-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.filtre-btn {
-    background: #ddd;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.filtre-btn.actif {
-    background: #007bff;
-    color: white;
-}
-
-/* ✅ Sélecteur d’emplacement */
-#emplacement-filtre, #search-location {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* ✅ Liste des catégories */
-#categories-list {
-    list-style: none;
-    padding: 0;
-}
-
-#categories-list li {
-    padding: 5px 0;
-}
-
-#categories-list a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-#categories-list a:hover {
-    text-decoration: underline;
-}
-
-/* ✅ Conteneur des boutons */
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-/* ✅ Boutons */
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}/* ✅ Conteneur principal */
-.main-container {
-    display: flex;
-    justify-content: space-between; /* Aligner les avis et les filtres */
-    align-items: flex-start; /* Alignement en haut */
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* ✅ Ajuster la section des filtres */
-.filtrage-container {
-    width: 280px; /* Largeur fixe pour la section filtres */
-    flex-shrink: 0; /* Empêche la réduction des filtres */
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ Ajuster la section des avis */
-#avisContainer {
-    flex-grow: 1; /* Prend toute la place restante */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ Cartes d'avis */
-.avis-card {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    width: 100%;
-    border-left: 5px solid #007bff;
-}
-
-.avis-card:hover {
-    transform: scale(1.02);
-}
-
-/* ✅ Logo de l'hôpital */
-.avis-logo {
-    width: 70px;
-    height: 70px;
-    background: #ddd;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-right: 15px;
-}
-
-
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
-    .avis-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
     .main-container {
-        flex-direction: column; /* Les filtres passent au-dessus */
+        flex-direction: column;
         align-items: center;
     }
 
     .filtrage-container {
-        width: 100%; /* Les filtres prennent toute la largeur */
+        width: 100%;
         margin-bottom: 20px;
+    }
+
+    .avis-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+
+    .navbar-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .search-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .button-container {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    #searchInput {
+        width: 90%;
     }
 }

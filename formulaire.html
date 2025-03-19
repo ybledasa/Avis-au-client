@@ -39,7 +39,7 @@
            
            <select name="hopital" id="hopital" required >
                 <option value="" disabled selected>-- Sélectionnez l'hôpital ou la clinique --</option>
-                <option value="Centre hospitalier universitaire de Cocody (CHU de Cocody)">Centre hospitalier universitaire de Cocody (CHU de Cocody)</option>
+                <option value="Centre hospitalier universitaire de Cocody (CHU de Cocody)" data-lat="5.3598" data-lng="-4.0083">Centre hospitalier universitaire de Cocody (CHU de Cocody)</option>
                 <option value="Centre hospitalier universitaire de Treichville (CHU de Treichville)">Centre hospitalier universitaire de Treichville (CHU de Treichville)</option>
                 <option value="Centre hospitalier universitaire de Yopougon (CHU de Yopougon)">Centre hospitalier universitaire de Yopougon (CHU de Yopougon)</option>
                 <option value="Centre hospitalier universitaire d'Angré (CHU d'Angré)">Centre hospitalier universitaire d'Angré (CHU d'Angré)</option>
@@ -75,7 +75,7 @@
                 <option value="Centre médical La Rochelle">Centre médical La Rochelle</option>
                 <option value="Clinique Trade Center">Clinique Trade Center</option>
                 <option value="Clinique Goci">Clinique Goci</option>
-                <option value="Centre médical 'La Sagesse', quartier Abobo">Centre médical "La Sagesse", quartier Abobo</option>
+                <option value="Centre médical 'La Sagesse', quartier Abobo">Centre médical "La Sagesse" quartier Abobo</option>
                 <option value="Clinique Israel">Clinique Israel</option>
                 <option value="Clinique Les Arcades">Clinique Les Arcades</option>
                 <option value="Clinique médicale Les Béatitudes">Clinique médicale Les Béatitudes</option>
@@ -112,9 +112,21 @@
                 <option value="centre médical st Nicolas">centre médical st Nicolas</option>
                 <option value="centre médical st Nicolas">Clinique Soma</option>
                 
+
                 
             </select>
-           </div>
+
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+        </div>
+        <h4>Autre</h4>
+        <input type="text" name="Autre" required>
+
+
+
+        <div>
+            
+        </div>
     
            <div>
             <h4>Motif de visite</h4>

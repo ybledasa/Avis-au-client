@@ -70,12 +70,66 @@ function formaterDate(dateStr) {
     let date = new Date(dateStr);
     return date.toLocaleDateString("fr-FR", {
         year: "numeric",
-        month: "long",
+        month: "numeric",
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit"
     });
 }
 
-// 🔹 Charger les avis après le chargement de la page
-document.addEventListener("DOMContentLoaded", afficherAvis);
+// ✅ Fonction pour récupérer les emplacements uniques
+async function chargerEmplacements() {
+    const emplacementFiltre = document.getElementById("emplacement-filtre");
+    emplacementFiltre.innerHTML = `<option value="all">Tous</option>`; // Réinitialiser
+
+    const querySnapshot = await getDocs(collection(db, "avisPatients"));
+    let emplacements = new Set();
+
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        if (data.hopital) {
+            emplacements.add(data.hopital);
+        }
+    });
+
+    emplacements.forEach((emplacement) => {
+        let option = document.createElement("option");
+        option.value = emplacement;
+        option.textContent = emplacement;
+        emplacementFiltre.appendChild(option);
+    });
+}
+
+// ✅ Fonction pour récupérer les services/catégories uniques
+async function chargerCategories() {
+    const categoriesList = document.getElementById("categories-list");
+    categoriesList.innerHTML = ""; // Vider avant d'ajouter
+
+    const querySnapshot = await getDocs(collection(db, "avisPatients"));
+    let categories = new Map(); // Utilisation d'une map pour compter le nombre d'avis par catégorie
+
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        if (data.motif) {
+            if (!categories.has(data.motif)) {
+                categories.set(data.motif, 1);
+            } else {
+                categories.set(data.motif, categories.get(data.motif) + 1);
+            }
+        }
+    });
+
+    categories.forEach((count, categorie) => {
+        let listItem = document.createElement("li");
+        listItem.innerHTML = `<a href="#">${categorie}</a> (${count})`;
+        categoriesList.appendChild(listItem);
+    });
+}
+// ✅ Charger les emplacements et catégories au démarrage
+document.addEventListener("DOMContentLoaded", async () => {
+    await chargerEmplacements();
+    await chargerCategories();
+    await afficherAvis()
+});
+
+

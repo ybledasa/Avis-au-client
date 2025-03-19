@@ -12,32 +12,32 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-.navbar {
-    position: fixed;
+
+
+/* ✅ Overlay sombre pour assombrir l’image */
+body::before {
+    content: "";
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Ajuste la hauteur si nécessaire */
-    background: url('image/avis5.jpg') no-repeat center center / cover;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 40px;
-    z-index: 1000; /* S'assure que le navbar est au-dessus du contenu */
+    height: 218%;
+    background: rgba(0, 0, 0, 0.5); /* Change l'intensité ici (0.5 = 50% sombre) */
+    z-index: 1;
 }
-
-
 
 /* Style du formulaire */
 .form-container {
     background: rgba(255, 255, 255, 0.9); /* Correction ici */
-    padding: 30px;
+    padding: 100px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgb(52, 4, 157);
     width: 60%;
     max-width: 600px;
     text-align: left;
     margin: auto; /* Centrage parfait */
+    position: relative;
+    z-index: 2;
 }
 .full-width-img {
     width: 100%;
@@ -51,6 +51,13 @@ body {
 
 .after-form-img {
     margin-top: 20px; /* Ajuste l’espace après le formulaire */
+}
+
+/* ✅ Ajuste le texte pour qu’il ressorte mieux */
+h1, p, h4, label {
+    position: relative;
+    z-index: 2;
+    color: white; /* Texte blanc pour contraste */
 }
 
 /* Titres */
@@ -92,6 +99,8 @@ input[type="text"], select {
     max-width: 400px; /* Empêche qu'ils soient trop larges */
     display: block; 
     font-size: 16px;
+    font-size: 16px;
+    background: white; /* Assure un bon contraste */
 }
 
 /* Boutons radio */

@@ -10,12 +10,32 @@
 </head>
 <body>
 
-    <h1>Liste des Avis</h1>
+    <!-- ✅ Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">Avis Patients</a>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..." onkeyup="filtrerAvis()">
+        </div>
 
-    <!-- Barre de recherche -->
-    <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..." onkeyup="filtrerAvis()">
+        <div class="button-container">
+            <button onclick="allerAuFormulaire()">Donner mon avis</button>
+            <button onclick="retourAccueil()">Retour à l'accueil</button>
+        </div>
+    </nav>
 
-    <!-- Conteneur principal -->
+    <!-- ✅ Section de titre -->
+    <section class="section-titre">
+        <div class="container">
+            
+            <h1>Liste des avis</h1>
+            <p class="sous-titre">Comparez les établissements et partagez votre expérience.</p>
+        </div>
+    </section>
+
+    <!-- ✅ Conteneur principal -->
     <div class="main-container">
         <!-- ✅ Section des filtres -->
         <div class="filtrage-container">
@@ -23,43 +43,39 @@
                 <h3>Note</h3>
                 <div class="filtre-options">
                     <button class="filtre-btn actif" data-note="all">Toutes</button>
-                    <button class="filtre-btn" data-note="3">★ 3,0+</button>
-                    <button class="filtre-btn" data-note="4">★ 4,0+</button>
-                    <button class="filtre-btn" data-note="4.5">★ 4,5+</button>
+                    <button class="filtre-btn" data-note="1">★ 1</button>
+                    <button class="filtre-btn" data-note="2">★ 2</button>
+                    <button class="filtre-btn" data-note="3">★ 3</button>
+                    <button class="filtre-btn" data-note="4">★ 4</button>
+                    <button class="filtre-btn" data-note="5">5</button>
                 </div>
             </div>
-    
+
             <div class="filtre-card">
                 <h3>Emplacement</h3>
                 <select id="emplacement-filtre">
                     <option value="all">Tous</option>
                     <option value="Abidjan">Abidjan</option>
                     <option value="Yopougon">Yopougon</option>
+                    <option value="Cocody">Cocody</option>
                 </select>
-                <input type="text" id="search-location" placeholder="Ville ou code postal">
             </div>
-    
+
             <div class="filtre-card">
                 <h3>Catégories associées</h3>
                 <ul id="categories-list">
-                    <li><a href="#">Urgence</a> (329)</li>
-                    <li><a href="#">Maternité</a> (61)</li>
-                    <li><a href="#">Chirurgie</a> (192)</li>
-                    <li><a href="#">Pédiatrie</a> (40)</li>
+                    <li><a href="#" style="text-decoration: none;">Urgence</a> (329)</li>
+                    <li><a href="#" style="text-decoration: none ;">Maternité</a> (61)</li>
+                    <li><a href="#" style="text-decoration: none;">Chirurgie</a> (192)</li>
+                    <li><a href="#" style="text-decoration: none;">Pédiatrie</a> (40)</li>
                 </ul>
             </div>
         </div>
-    
+
         <!-- ✅ Section des avis -->
         <div id="avisContainer">
             <p>Chargement des avis...</p>
         </div>
-    </div>
-
-    <!-- Boutons d'action -->
-    <div class="button-container">
-        <button onclick="allerAuFormulaire()">Donner mon avis</button>
-        <button onclick="retourAccueil()">Retour à l'accueil</button>
     </div>
 
     <script>
