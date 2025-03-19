@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// 🔹 Remplace par TES valeurs Firebase 🔹
+// 🔹 Configuration Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
     authDomain: "avis-au-client.firebaseapp.com",
@@ -12,6 +12,7 @@ const firebaseConfig = {
     appId: "1:291367297087:web:09beaf7794126fc79bd88a",
     measurementId: "G-WESSM7PQZM"
 };
+
 // 🔹 Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -31,21 +32,29 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", sear
 
         querySnapshot.forEach((doc) => {
             let data = doc.data();
-            let etoiles = genererEtoiles(data.recommandation || 0);
-            let dateFormatted = formaterDate(data.date);
 
-            // 🔹 Vérification des filtres appliqués
+            // Vérification des filtres appliqués
             if ((filtreMotif !== "all" && data.motif !== filtreMotif) ||
                 (filtreEmplacement !== "all" && data.hopital !== filtreEmplacement)) {
                 return;
             }
 
-            // 🔹 Filtrage par recherche (par hôpital ou service)
+            // Vérification du filtre de recherche
             if (searchQuery && !data.hopital.toLowerCase().includes(searchQuery.toLowerCase()) &&
                 !data.motif.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return;
             }
 
+            // 🔹 Calcul de la moyenne des étoiles
+            let accueilScore = parseInt(data.accueil) || 0;
+            let ecouteScore = parseInt(data.ecoute) || 0;
+            let moyenneStars = (accueilScore + ecouteScore) / 2;
+            let etoilesMoyenne = genererEtoiles(moyenneStars);
+
+            let etoiles = genererEtoiles(data.recommandation || 0);
+            let dateFormatted = formaterDate(data.date);
+
+            // Création de l'affichage de l'avis
             let avisDiv = document.createElement("div");
             avisDiv.classList.add("avis-card");
 
@@ -59,6 +68,12 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", sear
                     <p><strong>Service :</strong> ${data.motif || "Non précisé"}</p>
                     <p>${data.experience || "Aucune expérience détaillée"}</p>
                     <p><strong>Date :</strong> ${dateFormatted}</p>
+
+                    <!-- 🔹 Synthèse des étoiles -->
+                    <div class="avis-summary">
+                        <p><strong>Évaluation moyenne :</strong> ${etoilesMoyenne} (${moyenneStars.toFixed(1)}/5)</p>
+                       
+                    </div>
                 </div>
             `;
 
