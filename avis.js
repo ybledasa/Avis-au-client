@@ -17,8 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ✅ Fonction pour afficher les avis avec filtres et recherche
-async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", searchQuery = "") {
+// ✅ Fonction pour afficher les avis avec filtres (service, emplacement et note)
+async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filtreNote = "all", searchQuery = "") {
     const avisContainer = document.getElementById("avisContainer");
     avisContainer.innerHTML = "<p>Chargement des avis...</p>";
 
@@ -51,7 +51,11 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", sear
             let moyenneStars = (accueilScore + ecouteScore) / 2;
             let etoilesMoyenne = genererEtoiles(moyenneStars);
 
-            let etoiles = genererEtoiles(data.recommandation || 0);
+            // 🔹 Filtrage par note
+            if (filtreNote !== "all" && moyenneStars < filtreNote) {
+                return;
+            }
+
             let dateFormatted = formaterDate(data.date);
 
             // Création de l'affichage de l'avis
@@ -64,7 +68,7 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", sear
                     <div class="avis-header">
                         <span>${data.hopital || "Hôpital non précisé"}</span>
                     </div>
-                    <div class="avis-stars">${etoiles}</div>
+                    <div class="avis-stars">${etoilesMoyenne}</div>
                     <p><strong>Service :</strong> ${data.motif || "Non précisé"}</p>
                     <p>${data.experience || "Aucune expérience détaillée"}</p>
                     <p><strong>Date :</strong> ${dateFormatted}</p>
@@ -72,7 +76,8 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", sear
                     <!-- 🔹 Synthèse des étoiles -->
                     <div class="avis-summary">
                         <p><strong>Évaluation moyenne :</strong> ${etoilesMoyenne} (${moyenneStars.toFixed(1)}/5)</p>
-                       
+                        <p><strong>Accueil :</strong> ${genererEtoiles(accueilScore)}</p>
+                        <p><strong>Écoute :</strong> ${genererEtoiles(ecouteScore)}</p>
                     </div>
                 </div>
             `;
@@ -108,7 +113,13 @@ function formaterDate(dateStr) {
     });
 }
 
-// ✅ Charger les filtres dynamiques (services et emplacements)
+// ✅ Gestion des filtres (service, emplacement et note)
+document.addEventListener("DOMContentLoaded", async () => {
+    await chargerFiltres();
+    await afficherAvis();
+});
+
+// ✅ Fonction pour charger les filtres
 async function chargerFiltres() {
     const emplacementFiltre = document.getElementById("emplacement-filtre");
     const categoriesList = document.getElementById("categories-list");
@@ -126,7 +137,6 @@ async function chargerFiltres() {
         if (data.motif) categories.set(data.motif, (categories.get(data.motif) || 0) + 1);
     });
 
-    // 🔹 Ajout des options d'emplacements
     emplacements.forEach((emplacement) => {
         let option = document.createElement("option");
         option.value = emplacement;
@@ -134,23 +144,27 @@ async function chargerFiltres() {
         emplacementFiltre.appendChild(option);
     });
 
-    // 🔹 Ajout des services avec nombre d’avis
     categories.forEach((count, categorie) => {
         let listItem = document.createElement("li");
         listItem.innerHTML = `<a href="#" class="category-link" data-motif="${categorie}">${categorie}</a> (${count})`;
         categoriesList.appendChild(listItem);
     });
 
-    // 🔹 Gestion des clics sur les catégories
+    // 🔹 Gestion des filtres dynamiques
     document.querySelectorAll(".category-link").forEach((element) => {
         element.addEventListener("click", (event) => {
             event.preventDefault();
-            let motifSelectionne = event.target.getAttribute("data-motif");
-            afficherAvis(motifSelectionne, emplacementFiltre.value);
+            afficherAvis(event.target.getAttribute("data-motif"), emplacementFiltre.value);
         });
     });
 
-    // 🔹 Gestion du filtre emplacement
+    document.querySelectorAll(".filtre-btn").forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+            let selectedNote = event.target.getAttribute("data-note");
+            afficherAvis("all", emplacementFiltre.value, selectedNote);
+        });
+    });
+
     emplacementFiltre.addEventListener("change", () => {
         afficherAvis("all", emplacementFiltre.value);
     });
@@ -158,12 +172,5 @@ async function chargerFiltres() {
 
 // ✅ Gestion de la recherche dynamique
 document.getElementById("searchInput").addEventListener("input", (event) => {
-    const searchQuery = event.target.value.trim();
-    afficherAvis("all", "all", searchQuery);
-});
-
-// ✅ Charger les avis et les filtres au démarrage
-document.addEventListener("DOMContentLoaded", async () => {
-    await chargerFiltres();
-    await afficherAvis();
+    afficherAvis("all", "all", "all", event.target.value.trim());
 });
