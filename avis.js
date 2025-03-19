@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ✅ Fonction pour afficher les avis avec filtres (service, emplacement et note)
+// ✅ Fonction pour afficher les avis en appliquant les filtres
 async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filtreNote = "all", searchQuery = "") {
     const avisContainer = document.getElementById("avisContainer");
     avisContainer.innerHTML = "<p>Chargement des avis...</p>";
@@ -33,13 +33,13 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filt
         querySnapshot.forEach((doc) => {
             let data = doc.data();
 
-            // Vérification des filtres appliqués
+            // 🔹 Vérification des filtres appliqués
             if ((filtreMotif !== "all" && data.motif !== filtreMotif) ||
                 (filtreEmplacement !== "all" && data.hopital !== filtreEmplacement)) {
                 return;
             }
 
-            // Vérification du filtre de recherche
+            // 🔹 Vérification du filtre de recherche
             if (searchQuery && !data.hopital.toLowerCase().includes(searchQuery.toLowerCase()) &&
                 !data.motif.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return;
@@ -51,14 +51,14 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filt
             let moyenneStars = (accueilScore + ecouteScore) / 2;
             let etoilesMoyenne = genererEtoiles(moyenneStars);
 
-            // 🔹 Filtrage par note
-            if (filtreNote !== "all" && moyenneStars < filtreNote) {
+            // 🔹 Filtrage par note (exacte)
+            if (filtreNote !== "all" && Math.round(moyenneStars) !== parseInt(filtreNote)) {
                 return;
             }
 
             let dateFormatted = formaterDate(data.date);
 
-            // Création de l'affichage de l'avis
+            // 🔹 Création de l'affichage de l'avis
             let avisDiv = document.createElement("div");
             avisDiv.classList.add("avis-card");
 
@@ -113,7 +113,7 @@ function formaterDate(dateStr) {
     });
 }
 
-// ✅ Gestion des filtres (service, emplacement et note)
+// ✅ Gestion des filtres
 document.addEventListener("DOMContentLoaded", async () => {
     await chargerFiltres();
     await afficherAvis();
@@ -158,6 +158,7 @@ async function chargerFiltres() {
         });
     });
 
+    // 🔹 Gestion du filtre des étoiles (filtrage exact)
     document.querySelectorAll(".filtre-btn").forEach((btn) => {
         btn.addEventListener("click", (event) => {
             let selectedNote = event.target.getAttribute("data-note");
@@ -165,6 +166,7 @@ async function chargerFiltres() {
         });
     });
 
+    // 🔹 Gestion du filtre d'emplacement
     emplacementFiltre.addEventListener("change", () => {
         afficherAvis("all", emplacementFiltre.value);
     });
