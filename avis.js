@@ -71,14 +71,9 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filt
                     <div class="avis-stars">${etoilesMoyenne}</div>
                     <p><strong>Service :</strong> ${data.motif || "Non précisé"}</p>
                     <p>${data.experience || "Aucune expérience détaillée"}</p>
-                    <p><strong>Date :</strong> ${dateFormatted}</p>
+                    <p><strong></strong> ${dateFormatted}</p>
 
-                    <!-- 🔹 Synthèse des étoiles -->
-                    <div class="avis-summary">
-                        <p><strong>Évaluation moyenne :</strong> ${etoilesMoyenne} (${moyenneStars.toFixed(1)}/5)</p>
-                        <p><strong>Accueil :</strong> ${genererEtoiles(accueilScore)}</p>
-                        <p><strong>Écoute :</strong> ${genererEtoiles(ecouteScore)}</p>
-                    </div>
+                   
                 </div>
             `;
 

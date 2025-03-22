@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription Hôpital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center relative">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center text-indigo-700 mb-6">Inscription Hôpital</h2>
+
+    <input type="text" id="nom" placeholder="Nom de l'hôpital" class="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    <input type="text" id="contact" placeholder="Contact (Ex: +225 0700000000)" class="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    <input type="email" id="email" placeholder="Email valide" class="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    <input type="password" id="password" placeholder="Mot de passe (min. 6 caractères)" class="w-full mb-6 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+
+    <button id="register" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded transition duration-200 flex justify-center items-center">
+      <span> S'inscrire </span>
+      <svg id="loader" class="ml-2 h-5 w-5 animate-spin text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+
+    <p id="message" class="text-red-500 text-sm mt-4 text-center"></p>
+    <p class="mt-4 text-sm text-center">Déjà inscrit ? <a href="login.html" class="text-indigo-600 hover:underline">Se connecter</a></p>
+  </div>
+
+  <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-md hidden">
+    ✅ Inscription réussie ! Redirection en cours...
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+      authDomain: "avis-au-client.firebaseapp.com",
+      projectId: "avis-au-client",
+      storageBucket: "avis-au-client.appspot.com",
+      messagingSenderId: "291367297087",
+      appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+      measurementId: "G-WESSM7PQZM"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const registerBtn = document.getElementById("register");
+    const loader = document.getElementById("loader");
+    const message = document.getElementById("message");
+    const toast = document.getElementById("toast");
+
+    registerBtn.addEventListener("click", async () => {
+      const nom = document.getElementById("nom").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      message.textContent = "";
+      if (!nom || !contact || !email || !password) {
+        message.textContent = "Veuillez remplir tous les champs.";
+        return;
+      }
+      if (!/^\+?[0-9]{8,15}$/.test(contact)) {
+        message.textContent = "Format de contact invalide.";
+        return;
+      }
+      if (password.length < 6) {
+        message.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
+        return;
+      }
+
+      loader.classList.remove("hidden");
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "hopitaux", user.uid), {
+          nom,
+          contact,
+          email,
+          userId: user.uid,
+          statut: "en attente"
+        });
+
+        await setDoc(doc(db, "users", user.uid), {
+          role: "hopital",
+          email: email,
+          userId: user.uid,
+          createdAt: new Date()
+        });
+
+        toast.classList.remove("hidden");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      } catch (error) {
+        message.textContent = "Erreur : " + error.message;
+      } finally {
+        loader.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

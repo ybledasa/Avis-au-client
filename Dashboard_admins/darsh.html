@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-indigo-700 text-white flex flex-col p-4">
+    <h2 class="text-2xl font-bold mb-8">Admin</h2>
+    <nav class="space-y-4">
+      <button onclick="afficherSection('dashboard')" class="block text-left w-full hover:bg-indigo-600 p-2 rounded">🏠 Tableau de bord</button>
+      <button onclick="afficherSection('hopitaux'); chargerHopitaux()" class="block text-left w-full hover:bg-indigo-600 p-2 rounded">🏥 Hôpitaux</button>
+      <button onclick="afficherSection('avis-en-attente'); chargerAvisEnAttente();" class="block text-left w-full hover:bg-indigo-600 p-2 rounded">📝 Avis en attente</button>
+      <button id="logout" class="block text-left w-full bg-red-500 hover:bg-red-600 p-2 rounded mt-auto">🚪 Déconnexion</button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 space-y-6 overflow-auto">
+    <!-- Dashboard -->
+    <section id="dashboard" class="section">
+      <h1 class="text-3xl font-bold mb-4">Tableau de bord</h1>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+          <p class="text-xl text-gray-600">Total Hôpitaux</p>
+          <p id="totalHopitaux" class="text-4xl font-bold mt-2">5</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+          <p class="text-xl text-gray-600">Actifs</p>
+          <p id="actifs" class="text-4xl font-bold mt-2">3</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+          <p class="text-xl text-gray-600">En attente</p>
+          <p id="enAttente" class="text-4xl font-bold mt-2">2</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hôpitaux -->
+    <section id="hopitaux" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">Liste des hôpitaux</h2>
+      <div class="mb-4">
+        <input id="searchInput" oninput="filtrerHopitaux()" type="text" placeholder="Rechercher..."
+               class="border border-gray-300 rounded p-2 w-full max-w-sm" />
+      </div>
+      <div class="overflow-auto">
+        <table class="min-w-full bg-white rounded shadow text-sm">
+          <thead class="bg-indigo-600 text-white">
+            <tr>
+              <th class="p-3 text-left">Nom</th>
+              <th class="p-3 text-left">Email</th>
+              <th class="p-3 text-left">Contact</th>
+              <th class="p-3 text-left">Statut</th>
+              <th class="p-3 text-left">Vérifié</th>
+              <th class="p-3 text-left">Abonnement</th>
+              <th class="p-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableHopitaux" class="divide-y"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Avis en attente -->
+    <section id="avis-en-attente" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">📝 Avis en attente d'approbation</h2>
+      <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <table class="min-w-full table-auto text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 text-left">Nom</th>
+              <th class="px-4 py-2 text-left">Age</th>
+              <th class="px-4 py-2 text-left">Sexe</th>
+              <th class="px-4 py-2 text-left">Hôpital</th>
+              <th class="px-4 py-2 text-left">Motif</th>
+              <th class="px-4 py-2 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyAvisAttente">
+            <tr><td colspan="6" class="text-center p-4">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const hopitauxSimules = [
+      { nom: "CHU Cocody", email: "chu@cocody.ci", contact: "+2250101010101", statut: "Actif", verifie: true, abonnement: "Premium" },
+      { nom: "Clinique Sainte-Marie", email: "marie@clinique.ci", contact: "+2250202020202", statut: "Actif", verifie: false, abonnement: "Standard" },
+      { nom: "Hôpital Yopougon", email: "yop@hopital.ci", contact: "+2250303030303", statut: "En attente", verifie: false, abonnement: "Gratuit" },
+      { nom: "Polyclinique Indénié", email: "inde@poly.ci", contact: "+2250404040404", statut: "En attente", verifie: true, abonnement: "Standard" },
+      { nom: "Hôpital Treichville", email: "treich@hopital.ci", contact: "+2250505050505", statut: "Actif", verifie: true, abonnement: "Premium" },
+    ];
+
+    const avisSimules = [
+      { id: "1", nomPrenom: "Kouassi Jean", age: 32, sexe: "Homme", hopital: "CHU Cocody", motif: "Urgences" },
+      { id: "2", nomPrenom: "Koné Awa", age: 28, sexe: "Femme", hopital: "Clinique Sainte-Marie", motif: "Consultation" },
+      { id: "3", nomPrenom: "Traoré Salif", age: 45, sexe: "Homme", hopital: "CHU Treichville", motif: "Chirurgie" },
+      { id: "4", nomPrenom: "N'Dri Émilie", age: 37, sexe: "Femme", hopital: "Yopougon", motif: "Pédiatrie" },
+      { id: "5", nomPrenom: "Zoumana Fofana", age: 50, sexe: "Homme", hopital: "Polyclinique Indénié", motif: "Cardiologie" },
+    ];
+
+    function afficherSection(id) {
+      document.querySelectorAll(".section").forEach(el => el.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function chargerHopitaux() {
+      const table = document.getElementById("tableHopitaux");
+      table.innerHTML = hopitauxSimules.map(h => `
+        <tr>
+          <td class="p-3 col-nom">${h.nom}</td>
+          <td class="p-3 col-email">${h.email}</td>
+          <td class="p-3">${h.contact}</td>
+          <td class="p-3">${h.statut}</td>
+          <td class="p-3">${h.verifie ? "✅" : "❌"}</td>
+          <td class="p-3">${h.abonnement}</td>
+          <td class="p-3 text-center space-x-2">
+            <button class="bg-green-500 text-white px-2 py-1 rounded">Approuver</button>
+            <button class="bg-yellow-500 text-white px-2 py-1 rounded">Désactiver</button>
+            <button class="bg-red-500 text-white px-2 py-1 rounded">Supprimer</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function chargerAvisEnAttente() {
+      const tbody = document.getElementById("tbodyAvisAttente");
+      tbody.innerHTML = "";
+      avisSimules.forEach(a => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="px-4 py-2">${a.nomPrenom}</td>
+          <td class="px-4 py-2">${a.age}</td>
+          <td class="px-4 py-2">${a.sexe}</td>
+          <td class="px-4 py-2">${a.hopital}</td>
+          <td class="px-4 py-2">${a.motif}</td>
+          <td class="px-4 py-2 space-x-2">
+            <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="alert('✅ Avis approuvé (simulation)')">Approuver</button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="alert('🗑️ Avis supprimé (simulation)')">Supprimer</button>
+          </td>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    function filtrerHopitaux() {
+      const filtre = document.getElementById("searchInput").value.toLowerCase();
+      const lignes = document.querySelectorAll("#tableHopitaux tr");
+      lignes.forEach(tr => {
+        const nom = tr.querySelector(".col-nom")?.textContent.toLowerCase();
+        const email = tr.querySelector(".col-email")?.textContent.toLowerCase();
+        tr.style.display = nom?.includes(filtre) || email?.includes(filtre) ? "" : "none";
+      });
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      if (confirm("Voulez-vous vraiment vous déconnecter ?")) {
+        window.location.href = "accueil.html";
+      }
+    });
+  </script>
+
+</body>
+</html>

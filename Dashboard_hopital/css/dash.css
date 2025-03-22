@@ -1,0 +1,128 @@
+/* style.css - Design du Dashboard Hôpital */
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  height: 100vh;
+  margin: 0;
+}
+
+.sidebar {
+  width: 220px;
+  background: #007bff;
+  color: white;
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+.menu li {
+  list-style: none;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+  border-radius: 4px;
+}
+
+.menu li.active,
+.menu li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.menu li a {
+  color: white;
+  text-decoration: none;
+}
+
+.container {
+  margin-left: 240px;
+  padding: 20px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.main--content {
+  display: none;
+}
+
+.active-section {
+  display: block !important;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: white;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  width: 45%;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+  max-height: 180px;
+}
+
+table {
+  margin-top: 30px;
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+thead {
+  background: #007bff;
+  color: white;
+}
+
+button {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+input,
+select {
+  font-size: 14px;
+}
+
+/* Pagination */
+#pagination {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#pagination button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 5px;
+}
+
+#pagination button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}

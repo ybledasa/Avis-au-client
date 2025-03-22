@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion Hôpital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-sm text-center">
+    <img src="/image/avis9.jpg" alt="Logo Hôpital" class="w-16 h-16 mx-auto mb-4" />
+    <h2 class="text-2xl font-bold text-indigo-700 mb-2">Avis Patients</h2>
+    <p class="text-sm text-gray-500 mb-6">Connexion Hôpital</p>
+
+    <input type="email" id="email" placeholder="Email" class="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    <input type="password" id="password" placeholder="Mot de passe" class="w-full mb-2 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+
+    <a href="#" class="text-sm text-indigo-600 hover:underline mb-4 inline-block">Mot de passe oublié ?</a>
+
+    <button id="login" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded transition duration-200 flex justify-center items-center">
+      <span id="loginText">Se connecter</span>
+      <svg id="loader" class="w-5 h-5 ml-2 animate-spin hidden text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+    </button>
+
+    <p id="message" class="text-red-500 text-sm mt-4 text-center"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+      authDomain: "avis-au-client.firebaseapp.com",
+      projectId: "avis-au-client",
+      storageBucket: "avis-au-client.appspot.com",
+      messagingSenderId: "291367297087",
+      appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+      measurementId: "G-WESSM7PQZM"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginBtn = document.getElementById("login");
+    const loginText = document.getElementById("loginText");
+    const loader = document.getElementById("loader");
+
+    loginBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      loginText.textContent = "Connexion...";
+      loader.classList.remove("hidden");
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "dash_hopital.html";
+      } catch (error) {
+        message.textContent = "Erreur : " + error.message;
+      } finally {
+        loginText.textContent = "Se connecter";
+        loader.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
