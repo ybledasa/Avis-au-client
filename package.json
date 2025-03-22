@@ -1,5 +1,28 @@
 {
   "dependencies": {
     "firebase": "^11.4.0"
-  }
+  },
+  "name": "avis-au-client",
+  "description": "// Import the functions you need from the SDKs you need import { initializeApp } from \"firebase/app\"; import { getAnalytics } from \"firebase/analytics\"; // TODO: Add SDKs for Firebase products that you want to use // https://firebase.google.com/docs/web/setup#available-libraries",
+  "version": "1.0.0",
+  "main": "avis.js",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ybledasa/Avis-au-client.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ybledasa/Avis-au-client/issues"
+  },
+  "homepage": "https://github.com/ybledasa/Avis-au-client#readme"
 }
