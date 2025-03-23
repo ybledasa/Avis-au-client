@@ -1,6 +1,4 @@
-// ✅ Structure de base React + Tailwind pour le tableau de bord admin
-// Ce fichier suppose que Tailwind CSS est déjà installé dans ton projet
-
+// ✅ Structure de base React + Tailwind pour le tableau de bord admin (mise à jour avec expérience et suggestion)
 import React, { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import {
@@ -66,26 +64,30 @@ export default function AdminDashboard() {
       {loading ? (
         <p>Chargement...</p>
       ) : (
-        <table className="w-full bg-white shadow rounded">
+        <table className="w-full bg-white shadow rounded text-sm">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-2 text-left">Nom</th>
               <th className="p-2 text-left">Sexe</th>
               <th className="p-2 text-left">Hôpital</th>
               <th className="p-2 text-left">Motif</th>
+              <th className="p-2 text-left">Expérience</th>
+              <th className="p-2 text-left">Suggestion</th>
               <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {avis.length === 0 && (
-              <tr><td colSpan="5" className="text-center p-4">Aucun avis</td></tr>
+              <tr><td colSpan="7" className="text-center p-4">Aucun avis</td></tr>
             )}
             {avis.map(item => (
               <tr key={item.id} className="border-t hover:bg-gray-50">
-                <td className="p-2">{item.nomPrenom}</td>
+                <td className="p-2 font-medium">{item.nomPrenom}</td>
                 <td className="p-2">{item.sexe}</td>
                 <td className="p-2">{item.hopital}</td>
                 <td className="p-2">{item.motif || item.motifAutre}</td>
+                <td className="p-2 text-xs text-gray-600 italic">{item.experience || "—"}</td>
+                <td className="p-2 text-xs text-gray-600 italic">{item.suggestion || "—"}</td>
                 <td className="p-2 space-x-2">
                   <button onClick={() => approuverAvis(item.id)} className="bg-green-500 text-white px-2 py-1 rounded">✅</button>
                   <button onClick={() => supprimerAvis(item.id)} className="bg-red-500 text-white px-2 py-1 rounded">🗑️</button>
