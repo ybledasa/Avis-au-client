@@ -1,121 +1,107 @@
-// 🔹 Importation de Firebase
+// 🔹 Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// 🔹 Configuration Firebase
+// 🔹 Config Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
-    authDomain: "avis-au-client.firebaseapp.com",
-    projectId: "avis-au-client",
-    storageBucket: "avis-au-client.appspot.com",
-    messagingSenderId: "291367297087",
-    appId: "1:291367297087:web:09beaf7794126fc79bd88a",
-    measurementId: "G-WESSM7PQZM"
+  apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+  authDomain: "avis-au-client.firebaseapp.com",
+  projectId: "avis-au-client",
+  storageBucket: "avis-au-client.appspot.com",
+  messagingSenderId: "291367297087",
+  appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+  measurementId: "G-WESSM7PQZM"
 };
 
-// 🔹 Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ✅ Fonction pour afficher les avis récents
-async function afficherAvisRecents() {
-    const avisContainer = document.getElementById("recent-avis-container");
-    avisContainer.innerHTML = "<p>Chargement des avis...</p>";
-
-    try {
-        const q = query(collection(db, "avisPatients"), orderBy("date", "desc"), limit(3));
-        const querySnapshot = await getDocs(q);
-
-        avisContainer.innerHTML = ""; // Efface le message de chargement
-
-        if (querySnapshot.empty) {
-            avisContainer.innerHTML = "<p>Aucun avis disponible.</p>";
-            return;
-        }
-
-        querySnapshot.forEach((doc) => {
-            let data = doc.data();
-            let etoiles = genererEtoiles(data.recommandation || 0);
-
-            let avisDiv = document.createElement("div");
-            avisDiv.classList.add("avis-card");
-            avisDiv.innerHTML = `
-                <h3>${data.hopital || "Hôpital non précisé"}</h3>
-                <p><strong>Service :</strong> ${data.motif || "Non précisé"}</p>
-                <p><strong>Note :</strong> ${etoiles}</p>
-                <p><strong>Expérience :</strong> ${data.experience || "Aucune description"}</p>
-            `;
-            avisContainer.appendChild(avisDiv);
-        });
-
-        console.log("Avis récents chargés avec succès.");
-
-    } catch (error) {
-        console.error("Erreur lors du chargement des avis :", error);
-        avisContainer.innerHTML = "<p>Erreur lors du chargement des avis.</p>";
-    }
+// 🔸 Fonctions utilitaires
+function formaterDate(dateStr) {
+  let date = new Date(dateStr);
+  return date.toLocaleDateString("fr-FR", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit"
+  });
 }
 
-// ✅ Récupérer les services (motifs) et compter les avis
-async function afficherServices() {
-    const servicesContainer = document.getElementById("services-container");
-    servicesContainer.innerHTML = "<p>Chargement des services...</p>";
-
-    try {
-        const querySnapshot = await getDocs(collection(db, "avisPatients"));
-
-        let servicesData = {};
-
-        querySnapshot.forEach((doc) => {
-            let data = doc.data();
-            if (data.motif) {
-                if (!servicesData[data.motif]) {
-                    servicesData[data.motif] = { count: 0 };
-                }
-                servicesData[data.motif].count += 1;
-            }
-        });
-
-        let servicesArray = Object.entries(servicesData);
-        servicesContainer.innerHTML = ""; // Effacer le message de chargement
-
-        if (servicesArray.length === 0) {
-            servicesContainer.innerHTML = "<p>Aucun service disponible.</p>";
-            return;
-        }
-
-        servicesArray.forEach(([motif, info]) => {
-            let serviceBlock = document.createElement("div");
-            serviceBlock.classList.add("service-block");
-            serviceBlock.innerHTML = `
-                <h3>${motif}</h3>
-                <p>${info.count} avis</p>
-                <button onclick="window.location.href='service.html?motif=${encodeURIComponent(motif)}'">
-                    Voir les hôpitaux
-                </button>
-            `;
-            servicesContainer.appendChild(serviceBlock);
-        });
-
-        console.log("Services chargés avec succès :", servicesData);
-
-    } catch (error) {
-        console.error("Erreur lors du chargement des services :", error);
-        servicesContainer.innerHTML = "<p>Erreur lors du chargement.</p>";
-    }
-}
-
-// ✅ Fonction pour générer des étoiles en fonction de la note
 function genererEtoiles(note) {
-    let etoiles = "";
-    for (let i = 1; i <= 5; i++) {
-        etoiles += i <= note ? "★" : "☆";
-    }
-    return etoiles;
+  return "★".repeat(Math.floor(note)) + "☆".repeat(5 - Math.floor(note));
+}
+function getMotifIcon(motif) {
+    const icones = {
+      "Consultation": '<i class="fas fa-stethoscope"></i>',
+      "Urgence": '<i class="fas fa-ambulance"></i>',
+      "Hospitalisation": '<i class="fas fa-hospital"></i>',
+      "Maternité": '<i class="fas fa-baby"></i>',
+      "Autre": '<i class="fas fa-question-circle"></i>'
+    };
+    return icones[motif] || '<i class="fas fa-clinic-medical"></i>';
+  }
+  
+
+// ✅ Avis récents dynamiques
+async function chargerAvisRecents() {
+  const container = document.querySelector("#recent-avis");
+  if (!container) return;
+
+  const q = query(collection(db, "avisPatients"), orderBy("date", "desc"), limit(3));
+  const snapshot = await getDocs(q);
+
+  let html = "";
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    html += `
+     
+    <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-md hover:shadow-lg transition">
+        
+        <h3 class="text-lg font-bold text-primary mb-2">${data.hopital}</h3>
+        <p><strong</strong> ${genererEtoiles(data.accueil)}</p>
+        <p><strong>${getMotifIcon(data.motif)} Service :</strong> ${data.motif}</p>
+            <p class="mt-2 text-gray-600"><strong></strong><br>${data.experience}</p>
+            <p class="text-sm text-gray-400 mt-3">${formaterDate(data.date)}</p>
+        </div>
+        `;
+  });
+
+  container.innerHTML = html;
 }
 
-// 🔹 Charger les données après le chargement de la page
-document.addEventListener("DOMContentLoaded", () => {
-    afficherAvisRecents();
-    afficherServices();
+// ✅ Services dynamiques
+async function chargerServices() {
+  const container = document.querySelector("#dynamic-services");
+  if (!container) return;
+
+  const snapshot = await getDocs(collection(db, "avisPatients"));
+  const services = new Map();
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data.motif) {
+      services.set(data.motif, (services.get(data.motif) || 0) + 1);
+    }
+  });
+
+  let html = "";
+  Array.from(services.entries()).forEach(([motif, count]) => {
+    html += `
+      <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-xl transition-all duration-300 border">
+        <div class="text-5xl mb-3">${getMotifIcon(motif)}</div>
+        <h3 class="text-lg font-semibold text-gray-800 mb-1">${motif}</h3>
+        <p class="text-sm text-gray-500 mb-3">${count} ${count > 1 ? 'avis' : 'avis'}</p>
+        <a href="service.html?motif=${encodeURIComponent(motif)}"
+          class="inline-block mt-auto text-blue-600 hover:text-blue-800 text-sm underline">
+          Voir les avis
+        </a>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// ✅ Exécution au chargement
+document.addEventListener("DOMContentLoaded", async () => {
+  await chargerAvisRecents();
+  await chargerServices();
 });

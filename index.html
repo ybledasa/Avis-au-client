@@ -6,7 +6,8 @@
     <title>Accueil - Avis Patients</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <script>
       tailwind.config = {
         theme: {
@@ -25,7 +26,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet" />
     <style>
       .parallax-bg {
-        
         background-size: cover;
         background-position: center;
         min-height: 70vh;
@@ -65,19 +65,12 @@
       + Donner un avis
     </a>
 
-    <!-- Avis Récents -->
+    <!-- Section Avis Récents -->
     <section class="py-16 px-6 md:px-12 bg-white" data-aos="fade-up">
       <div class="max-w-7xl mx-auto text-center">
         <h2 class="text-3xl font-semibold text-gray-800 mb-8">Avis Récents</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-gray-50 p-6 rounded-lg shadow">
-            <h3 class="font-bold text-primary mb-2">CHU de Cocody</h3>
-            <p><strong>Service :</strong> Consultation</p>
-            <p><strong>Note :</strong> ⭐☆☆☆☆</p>
-            <p class="text-gray-700 mt-2"><strong>Expérience :</strong> L'infirmière était très désagréable.</p>
-          </div>
-          <div class="bg-gray-50 p-6 rounded-lg shadow">...</div>
-          <div class="bg-gray-50 p-6 rounded-lg shadow">...</div>
+        <div id="recent-avis" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Les avis récents s'afficheront ici -->
         </div>
         <div class="mt-8">
           <button onclick="voirAvis()" class="bg-secondary text-white px-6 py-2 rounded hover:bg-blue-700 transition">Voir plus</button>
@@ -85,29 +78,12 @@
       </div>
     </section>
 
-    <!-- Services -->
+    <!-- Section Services Dynamiques -->
     <section class="py-16 px-6 md:px-12 bg-gray-50" id="services" data-aos="fade-up">
       <div class="max-w-7xl mx-auto text-center">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-8">Nos Services</h2>
-        <div class="grid gap-6 md:grid-cols-3">
-          <div class="bg-white p-6 rounded shadow text-center hover:shadow-lg transition">
-            <div class="text-4xl mb-4">🏥</div>
-            <h3 class="font-bold mb-2">Hospitalisation</h3>
-            <p>1 avis</p>
-            <a href="#" class="text-blue-600 underline text-sm">Voir les hôpitaux</a>
-          </div>
-          <div class="bg-white p-6 rounded shadow text-center hover:shadow-lg transition">
-            <div class="text-4c mb-4">🩺</div>
-            <h3 class="font-bold mb-2">Consultation</h3>
-            <p>7 avis</p>
-            <a href="#" class="text-blue-600 underline text-sm">Voir les hôpitaux</a>
-          </div>
-          <div class="bg-white p-6 rounded shadow text-center hover:shadow-lg transition">
-            <div class="text-4xl mb-4">🚑</div>
-            <h3 class="font-bold mb-2">Urgence</h3>
-            <p>2 avis</p>
-            <a href="#" class="text-blue-600 underline text-sm">Voir les hôpitaux</a>
-          </div>
+        <h2 class="text-3xl font-semibold text-gray-800 mb-8">Services</h2>
+        <div id="dynamic-services" class="grid gap-6 md:grid-cols-3">
+          <!-- Services dynamiques injectés via JS -->
         </div>
       </div>
     </section>
