@@ -1,6 +1,6 @@
 // 🔹 Importation de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // 🔹 Configuration Firebase
 const firebaseConfig = {
@@ -17,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// 🔹 Variables globales
 let triPar = "date";
 let currentPage = 1;
 const avisParPage = 5;
@@ -27,7 +28,7 @@ function genererEtoiles(note) {
 }
 
 function formaterDate(dateStr) {
-  let date = new Date(dateStr);
+  const date = new Date(dateStr);
   return date.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "2-digit",
@@ -40,21 +41,24 @@ function formaterDate(dateStr) {
 async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filtreNote = "all", recherche = "") {
   const avisContainer = document.getElementById("avisContainer");
   const noResults = document.getElementById("no-results");
+
+  if (!avisContainer) return;
+
   avisContainer.innerHTML = "";
-  noResults.classList.add("hidden");
+  if (noResults) noResults.classList.add("hidden");
 
   const q = query(collection(db, "avisPatients"));
   const querySnapshot = await getDocs(q);
 
   allAvis = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-  if (triPar === "note") {
-    allAvis.sort((a, b) => (b.accueil || 0) - (a.accueil || 0));
-  } else {
-    allAvis.sort((a, b) => new Date(b.date) - new Date(a.date));
-  }
+  // Tri
+  allAvis.sort((a, b) => {
+    if (triPar === "note") return (b.accueil || 0) - (a.accueil || 0);
+    return new Date(b.date) - new Date(a.date);
+  });
 
-  let avisFiltres = allAvis.filter((data) => {
+  const avisFiltres = allAvis.filter((data) => {
     const matchMotif = filtreMotif === "all" || data.motif === filtreMotif;
     const matchEmplacement = filtreEmplacement === "all" || data.hopital === filtreEmplacement;
     const matchRecherche = !recherche || data.hopital?.toLowerCase().includes(recherche.toLowerCase()) || data.experience?.toLowerCase().includes(recherche.toLowerCase());
@@ -62,30 +66,29 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filt
     return matchMotif && matchEmplacement && matchRecherche && matchNote;
   });
 
+  // Pagination
   const start = (currentPage - 1) * avisParPage;
   const paginated = avisFiltres.slice(start, start + avisParPage);
 
-  if (paginated.length === 0) {
+  if (paginated.length === 0 && noResults) {
     noResults.classList.remove("hidden");
     return;
   }
 
   paginated.forEach((data) => {
     const avisDiv = document.createElement("div");
-    const dateFormatted = formaterDate(data.date);
-    const etoilesMoyenne = genererEtoiles(data.accueil || 0);
-
     avisDiv.className = "flex items-start gap-4 bg-white shadow-sm rounded-lg p-4 border-l-4 border-blue-600 hover:shadow-md transition-all duration-300 fade-in";
+
     avisDiv.innerHTML = `
       <div class="flex-shrink-0 bg-gray-200 text-gray-800 font-bold w-10 h-10 flex items-center justify-center rounded">
         ${data.hopital?.charAt(0) || "?"}
       </div>
       <div class="flex-1">
         <h3 class="text-lg font-semibold text-gray-800 mb-1">${data.hopital || "Hôpital non précisé"}</h3>
-        <p class="text-yellow-500 text-sm mb-1">${etoilesMoyenne}</p>
+        <p class="text-yellow-500 text-sm mb-1">${genererEtoiles(data.accueil || 0)}</p>
         <p><span class="font-semibold">Service :</span> ${data.motif || "Non précisé"}</p>
         <p class="text-sm italic my-1">${data.experience || "Aucune expérience détaillée"}</p>
-        <p class="text-gray-500 text-sm">📅 ${dateFormatted}</p>
+        <p class="text-gray-500 text-sm">📅 ${formaterDate(data.date)}</p>
       </div>
     `;
     avisContainer.appendChild(avisDiv);
@@ -97,6 +100,7 @@ async function afficherAvis(filtreMotif = "all", filtreEmplacement = "all", filt
 function afficherPagination(totalAvis) {
   const pagination = document.getElementById("pagination");
   if (!pagination) return;
+
   pagination.innerHTML = "";
   const totalPages = Math.ceil(totalAvis / avisParPage);
 
@@ -114,64 +118,80 @@ function afficherPagination(totalAvis) {
 
 async function chargerFiltres() {
   const emplacementFiltre = document.getElementById("emplacement-filtre");
-  const categoriesList = document.getElementById("categories-list");
+  const servicesList = document.getElementById("categories-list");
+
+  if (!emplacementFiltre || !servicesList) return;
 
   emplacementFiltre.innerHTML = `<option value="all">Tous</option>`;
-  categoriesList.innerHTML = "";
+  servicesList.innerHTML = "";
 
   const querySnapshot = await getDocs(collection(db, "avisPatients"));
   let emplacements = new Set();
-  let categories = new Map();
+  let services = new Map();
 
   querySnapshot.forEach((doc) => {
-    let data = doc.data();
+    const data = doc.data();
     if (data.hopital) emplacements.add(data.hopital);
-    if (data.motif) categories.set(data.motif, (categories.get(data.motif) || 0) + 1);
+    if (data.motif) services.set(data.motif, (services.get(data.motif) || 0) + 1);
   });
 
   emplacements.forEach((emplacement) => {
-    let option = document.createElement("option");
+    const option = document.createElement("option");
     option.value = emplacement;
     option.textContent = emplacement;
     emplacementFiltre.appendChild(option);
   });
 
-  categories.forEach((count, categorie) => {
-    let listItem = document.createElement("li");
-    listItem.innerHTML = `<a href="#" class="category-link text-blue-600 hover:underline" data-motif="${categorie}">${categorie}</a> (${count})`;
-    categoriesList.appendChild(listItem);
+  services.forEach((count, service) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="#" class="category-link text-blue-600 hover:underline" data-motif="${service}">${service}</a> (${count})`;
+    servicesList.appendChild(li);
   });
 
-  document.querySelectorAll(".category-link").forEach((element) => {
-    element.addEventListener("click", (event) => {
-      event.preventDefault();
-      currentPage = 1;
-      afficherAvis(event.target.getAttribute("data-motif"), emplacementFiltre.value);
-    });
-  });
-
-  document.querySelectorAll(".filtre-btn").forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      let selectedNote = event.target.getAttribute("data-note");
-      currentPage = 1;
-      afficherAvis("all", emplacementFiltre.value, selectedNote);
-    });
-  });
-
+  // Filtres dynamiques
   emplacementFiltre.addEventListener("change", () => {
     currentPage = 1;
     afficherAvis("all", emplacementFiltre.value);
   });
 
-  document.getElementById("tri-select").addEventListener("change", (e) => {
+  servicesList.addEventListener("click", (e) => {
+    if (e.target.classList.contains("category-link")) {
+      e.preventDefault();
+      const motif = e.target.dataset.motif;
+      currentPage = 1;
+      afficherAvis(motif, emplacementFiltre.value);
+    }
+  });
+
+  document.querySelectorAll(".filtre-btn").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      const selectedNote = event.target.getAttribute("data-note");
+      currentPage = 1;
+      afficherAvis("all", emplacementFiltre.value, selectedNote);
+    });
+  });
+
+  // Tri
+  document.getElementById("tri-select")?.addEventListener("change", (e) => {
     triPar = e.target.value;
     currentPage = 1;
     afficherAvis();
   });
 
-  document.getElementById("export-btn").addEventListener("click", () => {
-    const rows = allAvis.map((avis) => [avis.hopital, avis.motif, avis.accueil, avis.experience, formaterDate(avis.date)]);
-    const csvContent = ["Hôpital,Motif,Note,Expérience,Date", ...rows.map(e => e.join(","))].join("\n");
+  // Export CSV
+  document.getElementById("export-btn")?.addEventListener("click", () => {
+    const rows = allAvis.map((avis) => [
+      avis.hopital,
+      avis.motif,
+      avis.accueil,
+      avis.experience,
+      formaterDate(avis.date)
+    ]);
+    const csvContent = [
+      "Hôpital,Motif,Note,Expérience,Date",
+      ...rows.map((e) => e.join(","))
+    ].join("\n");
+
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -182,12 +202,13 @@ async function chargerFiltres() {
   });
 }
 
+// Initialisation
 document.addEventListener("DOMContentLoaded", async () => {
   await chargerFiltres();
   await afficherAvis();
 });
 
-document.getElementById("searchInput").addEventListener("input", (event) => {
+document.getElementById("searchInput")?.addEventListener("input", (e) => {
   currentPage = 1;
-  afficherAvis("all", "all", "all", event.target.value.trim());
+  afficherAvis("all", "all", "all", e.target.value.trim());
 });

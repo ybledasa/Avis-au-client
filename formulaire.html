@@ -283,15 +283,20 @@
       const formData = new FormData(form);
       let data = Object.fromEntries(formData.entries());
 
-      if (data.hopital === "Autre" && data.Autre) {
-        data.hopital = data.Autre;
-      }
-      delete data.Autre;
+      if (data.motif === "Autre" && data.motif_autre) {
+  data.motif = data.motif_autre.trim();
+}
+
 
       if (data.motif === "Autre" && data.motif_autre) {
         data.motif = data.motif_autre;
       }
       delete data.motif_autre;
+            // Remplacer le motif si "Autre" est sélectionné
+        if (data.motif === "Autre" && data.motif_autre.trim()) {
+        data.motif = data.motif_autre.trim();
+        }
+
 
       data.difficultes = Array.from(document.querySelectorAll("input[name='difficultes[]']:checked")).map(el => el.value);
       data.date = new Date().toISOString();
