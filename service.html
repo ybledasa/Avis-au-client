@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avis sur le Service</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow py-4 px-8 flex justify-between items-center">
+    <a href="index.html" class="text-xl font-bold text-blue-700">Avis Patients</a>
+    <a href="formulaire.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">Donner un avis</a>
+  </nav>
+
+  <!-- Section Titre -->
+  <section class="text-center py-10 px-6 bg-blue-100">
+    <h1 id="titre-motif" class="text-3xl font-semibold text-blue-900">Avis sur le service</h1>
+    <p class="text-gray-700 mt-2">Tous les avis concernant ce service sont listés ci-dessous.</p>
+  </section>
+
+  <!-- Liste des Avis -->
+  <main class="max-w-5xl mx-auto py-12 px-4">
+    <div id="avisContainer" class="space-y-4">
+      <p>Chargement des avis...</p>
+    </div>
+    <div id="no-results" class="text-center text-gray-500 mt-8 hidden">Aucun avis trouvé pour ce service.</div>
+  </main>
+
+  <script type="module" src="avis_service.js"></script>
+
+</body>
+</html>
