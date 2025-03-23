@@ -1,89 +1,113 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Avis</title>
-    <script type="module" src="avis.js"></script> 
-    <link rel="stylesheet" href="avis.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liste des Avis</title>
+  <script type="module" src="avis.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-gray-100">
 
-    <!-- ✅ Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <a href="index.html">Avis Patients</a>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..." onkeyup="filtrerAvis()">
-        </div>
-
-        <div class="button-container">
-            <button onclick="allerAuFormulaire()">Donner mon avis</button>
-           
-        </div>
-    </nav>
-
-    <!-- ✅ Section de titre -->
-    <section class="section-titre">
-        <div class="container">
-            
-            <h1>Liste des avis</h1>
-            <p class="sous-titre">Comparez les établissements et partagez votre expérience.</p>
-        </div>
-    </section>
-
-    <!-- ✅ Conteneur principal -->
-    <div class="main-container">
-        <!-- ✅ Section des filtres -->
-        <div class="filtrage-container">
-            <div class="filtre-card">
-                <h3>Note</h3>
-                <div class="filtre-options">
-                    <button class="filtre-btn actif" data-note="all">Toutes</button>
-                    <button class="filtre-btn" data-note="1">★ 1</button>
-                    <button class="filtre-btn" data-note="2">★ 2</button>
-                    <button class="filtre-btn" data-note="3">★ 3</button>
-                    <button class="filtre-btn" data-note="4">★ 4</button>
-                    <button class="filtre-btn" data-note="5">5</button>
-                </div>
-            </div>
-
-            <div class="filtre-card">
-                <div class="filtre-card">
-                    <h3>Emplacement</h3>
-                    <select id="emplacement-filtre">
-                        <option value="all">Tous</option>
-                    </select>
-                </div>
-                
-            </div>
-
-            <div class="filtre-card">
-                <h3>Services</h3>
-                <ul id="categories-list">
-                    <!-- Les services seront ajoutés dynamiquement -->
-                </ul>
-            </div>
-            
-        </div>
-
-        <!-- ✅ Section des avis -->
-        <div id="avisContainer">
-            <p>Chargement des avis...</p>
-        </div>
+  <!-- ✅ Navbar -->
+  <nav class="bg-white shadow p-4 flex flex-col md:flex-row items-center justify-between sticky top-0 z-50">
+    <div class="text-xl font-bold text-blue-600">
+      <a href="index.html">Avis Patients</a>
     </div>
 
-    <script>
-        function retourAccueil() {
-            window.location.href = "index.html";
-        }
-        function allerAuFormulaire() {
-            window.location.href = "formulaire.html";
-        }
-    </script>
+    <div class="my-2 md:my-0 w-full md:w-auto">
+      <input type="text" id="searchInput" placeholder="Rechercher un hôpital ou un avis..."
+        class="w-full md:w-96 px-4 py-2 border border-gray-300 rounded-md" />
+    </div>
 
+    <div class="mt-2 md:mt-0">
+      <button onclick="allerAuFormulaire()"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Donner mon avis</button>
+    </div>
+  </nav>
+
+  <!-- ✅ Section de titre -->
+  <section class="bg-blue-50 py-8 text-center">
+    <h1 class="text-3xl font-bold text-gray-800">Liste des avis</h1>
+    <p class="text-gray-600 mt-2">Comparez les établissements et partagez votre expérience.</p>
+  </section>
+ <!-- Menu de tri -->
+<div class="flex justify-end items-center gap-4 my-4 px-4">
+    <label for="tri-select" class="font-semibold">Trier par :</label>
+    <select id="tri-select" class="border px-3 py-1 rounded">
+      <option value="date" selected>📅 Date</option>
+      <option value="note">⭐ Note</option>
+    </select>
+    <button id="export-btn" class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-800 transition">
+      Exporter les avis
+    </button>
+  </div>
+  
+  <!-- Pagination -->
+  <div id="pagination" class="flex justify-center mt-6 flex-wrap"></div>
+  
+  <!-- Aucun résultat -->
+  <p id="no-results" class="hidden text-center text-red-500 font-semibold mt-4">Aucun avis trouvé pour vos critères.</p>
+  
+
+  <!-- ✅ Conteneur principal -->
+  <div class="flex flex-col md:flex-row gap-6 p-6 max-w-7xl mx-auto">
+    <!-- ✅ Section des filtres -->
+    <aside class="w-full md:w-1/4 space-y-6">
+      <div class="bg-white shadow p-4 rounded">
+        <h3 class="font-semibold mb-2">Note</h3>
+        <div class="space-y-2">
+          <button class="filtre-btn actif text-blue-600" data-note="all">Toutes</button><br />
+          <button class="filtre-btn" data-note="1">★ 1</button><br />
+          <button class="filtre-btn" data-note="2">★ 2</button><br />
+          <button class="filtre-btn" data-note="3">★ 3</button><br />
+          <button class="filtre-btn" data-note="4">★ 4</button><br />
+          <button class="filtre-btn" data-note="5">★ 5</button>
+        </div>
+      </div>
+
+      <div class="bg-white shadow p-4 rounded">
+        <h3 class="font-semibold mb-2">Emplacement</h3>
+        <select id="emplacement-filtre" class="w-full border border-gray-300 rounded px-2 py-1">
+          <option value="all">Tous</option>
+        </select>
+      </div>
+
+      <div class="bg-white shadow p-4 rounded">
+        <h3 class="font-semibold mb-2">Services</h3>
+        <ul id="categories-list" class="list-disc list-inside space-y-1 text-sm text-gray-700">
+          <!-- Services dynamiques -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- ✅ Avis affichés -->
+    <main class="flex-1">
+      <div id="avisContainer" class="space-y-4">
+        <!-- Avis dynamiques ici -->
+      </div>
+      <div id="no-results" class="hidden text-center text-red-500 font-semibold mt-4">Aucun avis ne correspond à votre recherche.</div>
+    </main>
+  </div>
+
+  <script>
+    function allerAuFormulaire() {
+      window.location.href = "formulaire.html";
+    }
+  </script>
 </body>
 </html>
