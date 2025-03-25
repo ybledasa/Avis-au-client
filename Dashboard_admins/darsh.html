@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin - Simulation</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCl46lrkQejIIz24g1P7Qt2ktNbG0MML4o",
+    authDomain: "avis-au-client.firebaseapp.com",
+    projectId: "avis-au-client",
+    storageBucket: "avis-au-client.appspot.com",
+    messagingSenderId: "291367297087",
+    appId: "1:291367297087:web:09beaf7794126fc79bd88a",
+    measurementId: "G-WESSM7PQZM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Stockage temporaire pour la modale
+  let hopitauxFirebase = [];
+
+  // Charger hôpitaux depuis Firestore
+  async function chargerHopitaux() {
+    const table = document.getElementById("tableHopitaux");
+    table.innerHTML = "<tr><td colspan='7' class='p-4 text-center'>Chargement...</td></tr>";
+
+    const querySnapshot = await getDocs(collection(db, "hopitaux"));
+    hopitauxFirebase = [];
+
+    let rows = "";
+
+    querySnapshot.forEach((docSnap, index) => {
+      const h = docSnap.data();
+      h.id = docSnap.id;
+      hopitauxFirebase.push(h);
+
+      rows += `
+        <tr>
+          <td class="p-3 col-nom">${h.nom}</td>
+          <td class="p-3 col-email">${h.email}</td>
+          <td class="p-3">${h.contact}</td>
+          <td class="p-3">${h.statut || 'En attente'}</td>
+          <td class="p-3">${h.verifie ? "✅" : "❌"}</td>
+          <td class="p-3">${h.abonnement || "Non défini"}</td>
+          <td class="p-3 text-center space-y-1">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm w-full"
+              onclick="voirJustificatif(${index})">Voir justificatif</button>
+            <button class="bg-green-500 text-white px-2 py-1 rounded text-sm w-full"
+              onclick="alert('✅ Justificatif approuvé')">Approuver</button>
+            <button class="bg-yellow-500 text-white px-2 py-1 rounded text-sm w-full">Désactiver</button>
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm w-full">Supprimer</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    table.innerHTML = rows || "<tr><td colspan='7' class='p-4 text-center text-gray-500'>Aucun hôpital trouvé.</td></tr>";
+  }
+
+  // Voir justificatif
+  window.voirJustificatif = (index) => {
+    const h = hopitauxFirebase[index];
+    const url = h.justificatifURL;
+    const modal = document.getElementById("modalJustificatif");
+    const contenu = document.getElementById("contenuJustificatif");
+
+    if (!url) {
+      contenu.innerHTML = "<p class='text-gray-500 text-center'>Aucun justificatif disponible.</p>";
+    } else {
+      const isPDF = url.toLowerCase().endsWith(".pdf");
+      contenu.innerHTML = isPDF
+        ? `<iframe src="${url}" class="w-full h-[500px]"></iframe>`
+        : `<img src="${url}" alt="Justificatif" class="max-w-full h-auto rounded">`;
+    }
+
+    modal.classList.remove("hidden");
+  };
+
+  // Fermer modale
+  window.fermerModal = () => {
+    document.getElementById("modalJustificatif").classList.add("hidden");
+  };
+</script>
+
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
@@ -88,21 +172,50 @@
     </section>
   </main>
 
+  <!-- Modale Justificatif -->
+  <div id="modalJustificatif" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg max-w-2xl w-full p-6 relative">
+      <button onclick="fermerModal()" class="absolute top-2 right-2 text-red-500 text-2xl font-bold">&times;</button>
+      <h3 class="text-lg font-semibold mb-4">Justificatif de l'hôpital</h3>
+      <div id="contenuJustificatif" class="overflow-auto max-h-[70vh]"></div>
+    </div>
+  </div>
+
   <script>
     const hopitauxSimules = [
-      { nom: "CHU Cocody", email: "chu@cocody.ci", contact: "+2250101010101", statut: "Actif", verifie: true, abonnement: "Premium" },
-      { nom: "Clinique Sainte-Marie", email: "marie@clinique.ci", contact: "+2250202020202", statut: "Actif", verifie: false, abonnement: "Standard" },
-      { nom: "Hôpital Yopougon", email: "yop@hopital.ci", contact: "+2250303030303", statut: "En attente", verifie: false, abonnement: "Gratuit" },
-      { nom: "Polyclinique Indénié", email: "inde@poly.ci", contact: "+2250404040404", statut: "En attente", verifie: true, abonnement: "Standard" },
-      { nom: "Hôpital Treichville", email: "treich@hopital.ci", contact: "+2250505050505", statut: "Actif", verifie: true, abonnement: "Premium" },
+      {
+        nom: "CHU Cocody",
+        email: "chu@cocody.ci",
+        contact: "+2250101010101",
+        statut: "Actif",
+        verifie: true,
+        abonnement: "Premium",
+        justificatifURL: "https://www.africau.edu/images/default/sample.pdf"
+      },
+      {
+        nom: "Clinique Sainte-Marie",
+        email: "marie@clinique.ci",
+        contact: "+2250202020202",
+        statut: "Actif",
+        verifie: false,
+        abonnement: "Standard",
+        justificatifURL: "https://via.placeholder.com/800x600"
+      },
+      {
+        nom: "Hôpital Yopougon",
+        email: "yop@hopital.ci",
+        contact: "+2250303030303",
+        statut: "En attente",
+        verifie: false,
+        abonnement: "Gratuit",
+        justificatifURL: "https://via.placeholder.com/700x500"
+      }
     ];
 
     const avisSimules = [
       { id: "1", nomPrenom: "Kouassi Jean", age: 32, sexe: "Homme", hopital: "CHU Cocody", motif: "Urgences" },
       { id: "2", nomPrenom: "Koné Awa", age: 28, sexe: "Femme", hopital: "Clinique Sainte-Marie", motif: "Consultation" },
-      { id: "3", nomPrenom: "Traoré Salif", age: 45, sexe: "Homme", hopital: "CHU Treichville", motif: "Chirurgie" },
-      { id: "4", nomPrenom: "N'Dri Émilie", age: 37, sexe: "Femme", hopital: "Yopougon", motif: "Pédiatrie" },
-      { id: "5", nomPrenom: "Zoumana Fofana", age: 50, sexe: "Homme", hopital: "Polyclinique Indénié", motif: "Cardiologie" },
+      { id: "3", nomPrenom: "Traoré Salif", age: 45, sexe: "Homme", hopital: "CHU Treichville", motif: "Chirurgie" }
     ];
 
     function afficherSection(id) {
@@ -113,7 +226,7 @@
 
     function chargerHopitaux() {
       const table = document.getElementById("tableHopitaux");
-      table.innerHTML = hopitauxSimules.map(h => `
+      table.innerHTML = hopitauxSimules.map((h, index) => `
         <tr>
           <td class="p-3 col-nom">${h.nom}</td>
           <td class="p-3 col-email">${h.email}</td>
@@ -121,13 +234,35 @@
           <td class="p-3">${h.statut}</td>
           <td class="p-3">${h.verifie ? "✅" : "❌"}</td>
           <td class="p-3">${h.abonnement}</td>
-          <td class="p-3 text-center space-x-2">
-            <button class="bg-green-500 text-white px-2 py-1 rounded">Approuver</button>
-            <button class="bg-yellow-500 text-white px-2 py-1 rounded">Désactiver</button>
-            <button class="bg-red-500 text-white px-2 py-1 rounded">Supprimer</button>
+          <td class="p-3 text-center space-y-1">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm w-full"
+              onclick="voirJustificatif(${index})">Voir justificatif</button>
+            <button class="bg-green-500 text-white px-2 py-1 rounded text-sm w-full"
+              onclick="alert('✅ Justificatif approuvé (simulation)')">Approuver</button>
+            <button class="bg-yellow-500 text-white px-2 py-1 rounded text-sm w-full">Désactiver</button>
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm w-full">Supprimer</button>
           </td>
         </tr>
       `).join("");
+    }
+
+    function voirJustificatif(index) {
+      const hopital = hopitauxSimules[index];
+      const modal = document.getElementById("modalJustificatif");
+      const contenu = document.getElementById("contenuJustificatif");
+
+      const url = hopital.justificatifURL;
+      const isPDF = url.toLowerCase().endsWith(".pdf");
+
+      contenu.innerHTML = isPDF
+        ? `<iframe src="${url}" class="w-full h-[500px]"></iframe>`
+        : `<img src="${url}" alt="Justificatif" class="max-w-full h-auto rounded">`;
+
+      modal.classList.remove("hidden");
+    }
+
+    function fermerModal() {
+      document.getElementById("modalJustificatif").classList.add("hidden");
     }
 
     function chargerAvisEnAttente() {
