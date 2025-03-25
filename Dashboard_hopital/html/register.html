@@ -76,73 +76,58 @@
     const loader = document.getElementById("loader");
     const message = document.getElementById("message");
 
-    registerBtn.addEventListener("click", async () => {
-      const nom = document.getElementById("nom").value.trim();
-      const contact = document.getElementById("contact").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const fichier = document.getElementById("justificatif").files[0];
+    
+  registerBtn.addEventListener("click", async () => {
+    const nom = document.getElementById("nom").value.trim();
+    const contact = document.getElementById("contact").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const fichier = document.getElementById("justificatif").files[0];
 
-      message.textContent = "";
+    // ⚠️ Vérification des champs
+    message.textContent = "";
+    if (!nom || !contact || !email || !password || !fichier) {
+      message.textContent = "Veuillez remplir tous les champs et ajouter un justificatif.";
+      return;
+    }
 
-      if (!nom || !contact || !email || !password || !fichier) {
-        message.textContent = "Veuillez remplir tous les champs et ajouter un justificatif.";
-        return;
-      }
-
-      if (!/^\+?[0-9]{8,15}$/.test(contact)) {
-        message.textContent = "Format de contact invalide.";
-        return;
-      }
-
-      if (password.length < 6) {
-        message.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
-        return;
-      }
-
+    try {
       loader.classList.remove("hidden");
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+      // ✅ Créer le compte utilisateur
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-        // 1. Upload du document dans Firebase Storage
-        const storageRef = ref(storage, `justificatifs/${user.uid}/${fichier.name}`);
-        await uploadBytes(storageRef, fichier);
-        const downloadURL = await getDownloadURL(storageRef);
+      // ✅ Envoyer le fichier dans Firebase Storage
+      const storageRef = ref(storage, `justificatifs/${user.uid}/${fichier.name}`);
+      await uploadBytes(storageRef, fichier);
 
-        // 2. Enregistrement dans Firestore
-        await setDoc(doc(db, "hopitaux", user.uid), {
-          nom,
-          contact,
-          email,
-          userId: user.uid,
-          justificatifURL: downloadURL,
-          statut: "en attente"
-        });
+      // ✅ Récupérer l'URL de téléchargement
+      const downloadURL = await getDownloadURL(storageRef);
 
-        await setDoc(doc(db, "users", user.uid), {
-          role: "hopital",
-          email: email,
-          userId: user.uid,
-          createdAt: new Date()
-        });
+      // ✅ Enregistrer les infos dans Firestore
+      await setDoc(doc(db, "hopitaux", user.uid), {
+        nom,
+        contact,
+        email,
+        userId: user.uid,
+        justificatifURL: downloadURL,
+        statut: "en attente",
+        verifie: false,
+        createdAt: new Date()
+      });
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Inscription réussie !',
-          text: 'Votre demande est en attente de validation. Vous allez être redirigé(e).',
-          confirmButtonText: 'OK'
-        }).then(() => {
-          window.location.href = "index.html";
-        });
+      // ✅ Redirection + message
+      alert("Inscription réussie !");
+      window.location.href = "index.html";
 
-      } catch (error) {
-        message.textContent = "Erreur : " + error.message;
-      } finally {
-        loader.classList.add("hidden");
-      }
-    });
+    } catch (error) {
+      console.error("Erreur :", error);
+      message.textContent = "Erreur : " + error.message;
+    } finally {
+      loader.classList.add("hidden");
+    }
+  });
   </script>
 </body>
 </html>
